@@ -1,0 +1,698 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/eianow-automation/naf_framework_solution_wizard/schemas/wizard_payload.schema.json",
+  "title": "WizardPayload",
+  "description": "The complete NAF Solution Wizard payload.\n\nEvery section is optional with a default so partial / legacy exports load\ncleanly. Use :meth:`validate_for_save` to enforce the fields that are\ngenuinely required before persisting.",
+  "$defs": {
+    "Collector": {
+      "properties": {
+        "methods": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Methods",
+          "type": "string"
+        },
+        "auth": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Auth",
+          "type": "string"
+        },
+        "handling": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Handling",
+          "type": "string"
+        },
+        "normalization": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Normalization",
+          "type": "string"
+        },
+        "scale": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Scale",
+          "type": "string"
+        },
+        "tools": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Tools",
+          "type": "string"
+        },
+        "selections": {
+          "$ref": "#/$defs/CollectorSelections"
+        }
+      },
+      "title": "Collector",
+      "type": "object"
+    },
+    "CollectorSelections": {
+      "properties": {
+        "methods": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Methods",
+          "type": "array"
+        },
+        "auth": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Auth",
+          "type": "array"
+        },
+        "handling": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Handling",
+          "type": "array"
+        },
+        "normalization": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Normalization",
+          "type": "array"
+        },
+        "devices": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Devices",
+          "type": "string"
+        },
+        "metrics_per_sec": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Metrics Per Sec",
+          "type": "string"
+        },
+        "cadence": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Cadence",
+          "type": "string"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "title": "CollectorSelections",
+      "type": "object"
+    },
+    "Dependency": {
+      "properties": {
+        "name": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "details": {
+          "default": "",
+          "maxLength": 500,
+          "title": "Details",
+          "type": "string"
+        }
+      },
+      "title": "Dependency",
+      "type": "object"
+    },
+    "Executor": {
+      "properties": {
+        "methods": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Methods",
+          "type": "string"
+        },
+        "selections": {
+          "$ref": "#/$defs/ExecutorSelections"
+        }
+      },
+      "title": "Executor",
+      "type": "object"
+    },
+    "ExecutorSelections": {
+      "properties": {
+        "methods": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Methods",
+          "type": "array"
+        }
+      },
+      "title": "ExecutorSelections",
+      "type": "object"
+    },
+    "Initiative": {
+      "properties": {
+        "author": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Author",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Title",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Description",
+          "type": "string"
+        },
+        "category": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Category",
+          "type": "string"
+        },
+        "problem_statement": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Problem Statement",
+          "type": "string"
+        },
+        "use_case": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Use Case",
+          "type": "string"
+        },
+        "expected_use": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Expected Use",
+          "type": "string"
+        },
+        "workflow_description": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Workflow Description",
+          "type": "string"
+        },
+        "workflow_steps": {
+          "items": {
+            "$ref": "#/$defs/WorkflowStep"
+          },
+          "title": "Workflow Steps",
+          "type": "array"
+        },
+        "error_conditions": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Error Conditions",
+          "type": "string"
+        },
+        "assumptions": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Assumptions",
+          "type": "string"
+        },
+        "deployment_strategy": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Deployment Strategy",
+          "type": "string"
+        },
+        "deployment_strategy_description": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Deployment Strategy Description",
+          "type": "string"
+        },
+        "out_of_scope": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Out Of Scope",
+          "type": "string"
+        },
+        "no_move_forward": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "No Move Forward",
+          "type": "string"
+        },
+        "no_move_forward_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "No Move Forward Reasons",
+          "type": "array"
+        }
+      },
+      "title": "Initiative",
+      "type": "object"
+    },
+    "Intent": {
+      "properties": {
+        "development": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Development",
+          "type": "string"
+        },
+        "provided": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Provided",
+          "type": "string"
+        },
+        "selections": {
+          "$ref": "#/$defs/IntentSelections"
+        }
+      },
+      "title": "Intent",
+      "type": "object"
+    },
+    "IntentSelections": {
+      "properties": {
+        "development": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Development",
+          "type": "array"
+        },
+        "provided": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Provided",
+          "type": "array"
+        }
+      },
+      "title": "IntentSelections",
+      "type": "object"
+    },
+    "MyRole": {
+      "properties": {
+        "who": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Who",
+          "type": "string"
+        },
+        "skills": {
+          "default": "",
+          "maxLength": 300,
+          "title": "Skills",
+          "type": "string"
+        },
+        "developer": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Developer",
+          "type": "string"
+        }
+      },
+      "title": "MyRole",
+      "type": "object"
+    },
+    "Observability": {
+      "properties": {
+        "methods": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Methods",
+          "type": "string"
+        },
+        "go_no_go": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Go No Go",
+          "type": "string"
+        },
+        "additional_logic": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Additional Logic",
+          "type": "string"
+        },
+        "tools": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Tools",
+          "type": "string"
+        },
+        "selections": {
+          "$ref": "#/$defs/ObservabilitySelections"
+        }
+      },
+      "title": "Observability",
+      "type": "object"
+    },
+    "ObservabilitySelections": {
+      "properties": {
+        "methods": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Methods",
+          "type": "array"
+        },
+        "go_no_go_text": {
+          "default": "",
+          "title": "Go No Go Text",
+          "type": "string"
+        },
+        "additional_logic_enabled": {
+          "default": false,
+          "title": "Additional Logic Enabled",
+          "type": "boolean"
+        },
+        "additional_logic_text": {
+          "default": "",
+          "title": "Additional Logic Text",
+          "type": "string"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "title": "ObservabilitySelections",
+      "type": "object"
+    },
+    "Orchestration": {
+      "properties": {
+        "summary": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Summary",
+          "type": "string"
+        },
+        "selections": {
+          "$ref": "#/$defs/OrchestrationSelections"
+        }
+      },
+      "title": "Orchestration",
+      "type": "object"
+    },
+    "OrchestrationSelections": {
+      "properties": {
+        "choice": {
+          "default": "",
+          "title": "Choice",
+          "type": "string"
+        },
+        "details": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Details",
+          "type": "string"
+        }
+      },
+      "title": "OrchestrationSelections",
+      "type": "object"
+    },
+    "Presentation": {
+      "properties": {
+        "users": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Users",
+          "type": "string"
+        },
+        "interaction": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Interaction",
+          "type": "string"
+        },
+        "tools": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Tools",
+          "type": "string"
+        },
+        "auth": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Auth",
+          "type": "string"
+        },
+        "selections": {
+          "$ref": "#/$defs/PresentationSelections"
+        }
+      },
+      "title": "Presentation",
+      "type": "object"
+    },
+    "PresentationSelections": {
+      "properties": {
+        "users": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Users",
+          "type": "array"
+        },
+        "interactions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Interactions",
+          "type": "array"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        },
+        "auth": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Auth",
+          "type": "array"
+        }
+      },
+      "title": "PresentationSelections",
+      "type": "object"
+    },
+    "Stakeholders": {
+      "properties": {
+        "choices": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Choices",
+          "type": "object"
+        },
+        "other": {
+          "default": "",
+          "maxLength": 500,
+          "title": "Other",
+          "type": "string"
+        }
+      },
+      "title": "Stakeholders",
+      "type": "object"
+    },
+    "Timeline": {
+      "properties": {
+        "start_date": {
+          "default": "",
+          "maxLength": 10,
+          "title": "Start Date",
+          "type": "string"
+        },
+        "total_business_days": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Total Business Days",
+          "type": "integer"
+        },
+        "projected_completion": {
+          "anyOf": [
+            {
+              "maxLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Projected Completion"
+        },
+        "build_buy": {
+          "default": "",
+          "maxLength": 50,
+          "title": "Build Buy",
+          "type": "string"
+        },
+        "staff_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Staff Count",
+          "type": "integer"
+        },
+        "external_staff_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "External Staff Count",
+          "type": "integer"
+        },
+        "staffing_plan_md": {
+          "default": "",
+          "maxLength": 100000,
+          "title": "Staffing Plan Md",
+          "type": "string"
+        },
+        "holiday_region": {
+          "default": "",
+          "maxLength": 50,
+          "title": "Holiday Region",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/TimelineItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "title": "Timeline",
+      "type": "object"
+    },
+    "TimelineItem": {
+      "properties": {
+        "name": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "duration_bd": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Duration Bd",
+          "type": "integer"
+        },
+        "start": {
+          "default": "",
+          "maxLength": 10,
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "default": "",
+          "maxLength": 10,
+          "title": "End",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 500,
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "title": "TimelineItem",
+      "type": "object"
+    },
+    "WorkflowStep": {
+      "description": "One step in the initiative's workflow (edited as a table, like milestones).",
+      "properties": {
+        "name": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "title": "WorkflowStep",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "initiative": {
+      "$ref": "#/$defs/Initiative"
+    },
+    "my_role": {
+      "$ref": "#/$defs/MyRole"
+    },
+    "stakeholders": {
+      "$ref": "#/$defs/Stakeholders"
+    },
+    "presentation": {
+      "$ref": "#/$defs/Presentation"
+    },
+    "intent": {
+      "$ref": "#/$defs/Intent"
+    },
+    "observability": {
+      "$ref": "#/$defs/Observability"
+    },
+    "orchestration": {
+      "$ref": "#/$defs/Orchestration"
+    },
+    "collector": {
+      "$ref": "#/$defs/Collector"
+    },
+    "executor": {
+      "$ref": "#/$defs/Executor"
+    },
+    "dependencies": {
+      "items": {
+        "$ref": "#/$defs/Dependency"
+      },
+      "title": "Dependencies",
+      "type": "array"
+    },
+    "dependencies_narrative": {
+      "default": "",
+      "maxLength": 4000,
+      "title": "Dependencies Narrative",
+      "type": "string"
+    },
+    "timeline": {
+      "$ref": "#/$defs/Timeline"
+    },
+    "naf_report_md": {
+      "anyOf": [
+        {
+          "maxLength": 100000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Naf Report Md"
+    }
+  },
+  "type": "object"
+}
