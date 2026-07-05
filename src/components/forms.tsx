@@ -266,7 +266,7 @@ function ProblemStatementForm() {
                   onChange={(v) => setField("initiative.use_case", v)} />
       </Field>
       <Field label="Workflow description" required
-             hint="Narrative of the workflow; add structured steps below if useful.">
+             hint="Describe the workflow here. For structured steps, switch to Detailed mode and add them below.">
         <TextArea value={ini.workflow_description} rows={4} maxLength={4000}
                   onChange={(v) => setField("initiative.workflow_description", v)} />
       </Field>

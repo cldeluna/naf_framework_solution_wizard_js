@@ -62,7 +62,7 @@ settings). Check items off as done.
 
 - [ ] Replace the Streamlit Cloud app with a short retirement notice + link to
       the new URL, then delete the deployment.
-- [ ] Remove the Streamlit app's `APP_URL` entry from Supabase → Authentication
+- [x] Remove the Streamlit app's `APP_URL` entry from Supabase → Authentication
       → URL Configuration (keep localhost + the Cloudflare Pages URL).
 - [ ] Update the Python repo README: the repo's mission is now the canonical
       Pydantic models + schema generation, SQL migrations, and seed/load
