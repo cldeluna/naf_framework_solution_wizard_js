@@ -8,6 +8,20 @@ Live site: **https://naf-solution-wizard.ing/**
 
 The wizard works fully signed out — sign-in is only needed to save to or load from the shared community catalog.
 
+### Usage modes
+
+The app is designed around two distinct modes, and you can move between them at any time without losing work:
+
+| | Standalone (no account) | Authenticated (signed in with Google) |
+|---|---|---|
+| **Fill out the wizard** | ✅ Full puzzle, all ten sections | ✅ Same |
+| **Download your work** | ✅ JSON or the JSON+Markdown+Gantt ZIP bundle | ✅ Same |
+| **Upload/reload your work** | ✅ Load a previously downloaded `naf_report_*.json` back into the wizard | ✅ Same |
+| **Browse what others have shared** (the Solutions catalog — problem statements, use cases, and solution designs from the community) | ❌ Not available | ✅ Required |
+| **Save your design to the shared catalog, or edit/update one you already saved** | ❌ Not available | ✅ Required |
+
+In short: **everything you need to work through the wizard on your own — filling it in, downloading it, coming back and loading it again — is available with no account at all.** Signing in only comes into play the moment you want to either look at what other people in the community have submitted, or publish/edit your own entry in that shared catalog. See "Home page" and "Solutions page" below for the specifics.
+
 ### Home page
 
 - Framework overview and a **🚀 Start Building Your Solution** button that opens the Wizard.
@@ -83,9 +97,24 @@ Reference glossary: use-case categories, deployment strategies, and the curated 
 - **Can't save to the catalog?** The Save button stays grayed out until you're signed in — it won't prompt a sign-in for you, so go sign in via the Home page first. It also requires every *required* field to be filled in; hover the button to see how many are still missing.
 - **Importing an old JSON file that came from the original Streamlit app?** It should still load — legacy fields are tolerated on import.
 
-## Setup
+## Tech Stack
 
-Requires Node 20+.
+This is a **static single-page app (SPA)**: everything runs in the visitor's browser as plain files (HTML/CSS/JS) served from a CDN. There's no Python/Node server running in production — the browser talks directly to Supabase for auth and the database. That's what makes it free to host and fast to load.
+
+| Piece | What it is | Why it's here |
+|---|---|---|
+| **TypeScript** | JavaScript with optional type annotations, checked at compile time (`npm run build` runs `tsc`, the TypeScript compiler). Comparable to adding type hints in Python, but the compiler actually enforces them and refuses to build if they don't line up. | Catches a whole class of bugs (wrong field name, wrong shape of data) before the code ever runs, which matters a lot with an ~11-section payload object. |
+| **Vite** | The build tool and dev server (`npm run dev`, `npm run build`). It bundles all the source files into the optimized static files that actually get deployed, and during development it serves your code with near-instant reload on save (Hot Module Replacement) instead of a slow full-page refresh. Think of it as the JS equivalent of a combination of a task runner and a local web server — there's no direct Python equivalent, but it plays a role a bit like `uvicorn --reload` does for a Python dev server. | Modern, fast, minimal-config alternative to older bundlers like Webpack; it's the standard starting point for a new React project today. |
+| **React** | A UI library for building interfaces out of reusable, stateful components (a `<PuzzleBoard>`, a `<SectionPanel>`, etc.) that automatically re-render when their data changes. | The interactive puzzle board (click a piece → panel opens → typing updates state → piece animates) maps naturally onto React's component + state model. It also has the largest ecosystem and community of any JS UI framework, which matters while learning. |
+| **Zustand** | A small state-management library — one global "store" object (`src/state/store.ts`) that holds the entire wizard payload and notifies components when it changes. | Replaces what the original Streamlit app did with ~150 individually-managed `session_state` keys with a single typed object; much less to keep track of, and it's what drives autosave (every change is written straight to the store, then debounced to `localStorage`). |
+| **Zod** | A schema-validation library that checks data shapes at runtime and reports exactly what's wrong. Plays the same role TypeScript's types do, but at runtime — e.g. validating a JSON file someone uploads, which the compiler can't check ahead of time. If you know Pydantic from Python, Zod is the closest JS equivalent. | Guarantees imported/exported JSON actually matches the expected wizard structure, and generates the TypeScript types automatically so the two never drift apart. |
+| **Supabase** | A hosted backend built on Postgres: a real SQL database plus built-in user authentication and **Row Level Security (RLS)** — database-enforced rules about who can read/write which rows. | Gives the app a real shared database and login system without writing or hosting a custom backend server. Because the browser holds only a public "anon" key, RLS (not application code) is what actually keeps one user's data safe from another's. |
+| **Google OAuth (via Supabase Auth)** | "Sign in with Google" — the app redirects to Google, Google confirms your identity, and Supabase turns that into a session token stored in your browser. | Familiar one-click sign-in with no passwords for this app to manage or leak; Supabase handles the token exchange and refresh automatically. |
+| **Cloudflare Pages** | Free static-site hosting with a global CDN. Watches the GitHub repo and automatically rebuilds/redeploys on every push to `main`. | Zero-cost, zero-maintenance hosting for a client-only SPA — no server to patch or pay for, and no cold starts (a real problem with the old Streamlit Cloud deployment). |
+| **markdown-it** | Renders the generated Markdown solution report as HTML for the in-app live preview. | Lightweight, well-established Markdown renderer; used with HTML rendering disabled so pasted/typed content can't inject markup. |
+| **oxlint** | A fast linter (`npm run lint`) that flags common JS/TS mistakes. | Rust-based and much faster than the traditional ESLint on a project this size. |
+
+
 
 ```bash
 npm install
