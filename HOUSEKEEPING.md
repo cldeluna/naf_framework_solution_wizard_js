@@ -30,6 +30,34 @@ settings). Check items off as done.
       git push -u origin main`). Initial commit `a5bd33c` is already made with
       your name/email as author.
 
+## Phase 2 (catalog) — apply before testing save/load
+
+- [ ] **Apply migration `supabase/migrations/0005_spa_hardening.sql`** in the
+      Supabase SQL editor (adds server-side text sanitization + size caps —
+      required now that the browser talks to the DB directly). The access
+      policies from `setup_db_auth.py` are already correct and unchanged.
+- [ ] **Confirm your user has the admin role** (needed for the Admin page):
+
+      ```sql
+      insert into public.user_roles (user_id, role)
+      values ('<your-auth-user-uuid>', 'admin')
+      on conflict (user_id) do update set role = 'admin';
+      ```
+      4250ec17-27d1-4ce9-ba8c-03f4c533ccf5
+      
+      (Find your UUID: Supabase → Authentication → Users. Skip if already
+      granted for the Streamlit app.)
+
+## Streamlit decommission (decided 2026-07-05; execute when the new app deploys)
+
+- [ ] Replace the Streamlit Cloud app with a short retirement notice + link to
+      the new URL, then delete the deployment.
+- [ ] Remove the Streamlit app's `APP_URL` entry from Supabase → Authentication
+      → URL Configuration (keep localhost + the Cloudflare Pages URL).
+- [ ] Update the Python repo README: the repo's mission is now the canonical
+      Pydantic models + schema generation, SQL migrations, and seed/load
+      scripts. Streamlit UI code is frozen, not maintained.
+
 ## Environment / settings
 
 - [x] Reinstall `node_modules` natively after the Linux-sandbox install

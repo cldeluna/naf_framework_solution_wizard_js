@@ -66,6 +66,28 @@ details summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; }
 }
 .sponsors img { border-radius: 50%; }
 
+.modal {
+  margin: auto; background: var(--panel-bg);
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.25rem; width: min(440px, 92vw);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.catalog-item { margin-bottom: 0.6rem; }
+
+.report-preview {
+  white-space: pre-wrap; font-size: 0.82rem; line-height: 1.45;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.9rem; max-height: 420px; overflow-y: auto;
+}
+.gantt-wrap svg { width: 100%; height: auto; border-radius: 8px; margin: 0.5rem 0; }
+
+.mine-tag {
+  font-size: 0.7rem; font-weight: 700; color: #111;
+  background: var(--naf-yellow); border-radius: 8px;
+  padding: 1px 7px; margin-left: 6px; vertical-align: middle;
+}
+
 .badge { font-size: 0.8rem; color: var(--text-dim); display: inline-flex; align-items: center; gap: 0.4rem; }
 .badge.subtle { opacity: 0.8; }
 

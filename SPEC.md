@@ -197,6 +197,7 @@ FRs marked **[P1]** are launch-blocking; **[P2]** fast-follow; **[P3]** nice-to-
 - **FR-16 [P3]** Landing page parity (framework intro, disclaimer, sponsor footer).
 - **FR-17 [P2]** Self-hosting path: environment-variable configuration, migration scripts, admin-role seed script, JSON-only degradation when no DB is configured, setup README.
 - **FR-18 [P2]** Email magic-link as an additional sign-in provider (removes OAuth setup burden for self-hosters).
+- **FR-19 [P2, designed — not yet implemented]** Structured tool capture: tool questions (Presentation, Observability, Collector, Executor) offer a typeahead over the tool catalog, storing selected tool names in the existing `selections` string arrays (no payload-contract change). Backed by the `tools` table and curation flow specified in §5b.
 
 ## 5. Non-Functional Requirements
 
@@ -207,18 +208,77 @@ FRs marked **[P1]** are launch-blocking; **[P2]** fast-follow; **[P3]** nice-to-
 - **NFR-5 Accessibility**: puzzle actions reachable by keyboard; section buttons remain as alternative navigation.
 - **NFR-6 Maintainability**: payload contract enforced by generated schema check in CI on both sides.
 
+## 5a. Analytics, API & MCP Surface
+
+**Storage decision (affirmed 2026-07-05).** The hybrid schema stays: browse/filter fields as real columns, document-shaped content (six NAF components, border pieces) as JSONB validated by the shared payload contract and sanitized by DB triggers. JSONB in Postgres is queryable/indexable (GIN on `solutions.payload`); at catalog scale (hundreds of rows) full normalization would add join complexity without enabling any new query.
+
+**Analytics escape hatches (add when a real need appears, all non-breaking):**
+
+- SQL **views** that unnest `selections` arrays into flat rows — e.g. `solution_tools(solution_id, section, tool)` — making BI/CSV queries trivial.
+- **Generated columns** promoting hot JSONB fields to indexed columns.
+- Postgres FTS (`tsvector`) over narrative fields for keyword search.
+
+**Worked example — "which solutions use SuzieQ for observability or collection?"**
+Answerable today with a section-scoped `ilike` over the JSONB (precision is fine); but **recall is limited by capture, not storage**: the tool questions record *categories* ("Open Source Software"), so a product name appears only if typed into a custom field. Planned fix (**FR-19 [P2]**): tool questions gain a typeahead over the curated tool catalog (`tools.json`, 97 tools with framework-function tags), storing chosen tools as structured entries alongside the category checkboxes. Then per-tool queries and "top tools" community analytics become exact lookups. A normalized schema would have had the same capture gap — this is a data-modeling issue, not a storage-format issue.
+
+**API surface.** Supabase's PostgREST *is* the API (the SPA already consumes it): external clients authenticate with a Supabase JWT and get the same RLS-enforced access. For a curated surface, add Postgres `rpc` functions or Supabase Edge Functions (e.g. `search_solutions(query)`, `get_solution_payload(id)`); the FastAPI in `api/` can also be revived against the same DB since it shares the Pydantic models.
+
+**MCP server (candidate Phase 5).** A community MCP server exposing tools like `search_solutions`, `get_solution_design`, `list_categories` — the JSONB payload is returned as-is (zero assembly) and the generated JSON Schema doubles as the tool output contract. Lets community members query the NAF catalog from Claude or other MCP clients. Auth: Supabase JWT per user; RLS remains the boundary.
+
+## 5b. Tool Catalog Design (FR-19 — designed 2026-07-05, not yet implemented)
+
+Making tools searchable turns the tool list from a static file into a first-class entity with its own lifecycle. Full design, to be implemented as its own milestone:
+
+**`tools` table (new migration when implemented):**
+
+```sql
+create table public.tools (
+    id                  uuid primary key default gen_random_uuid(),
+    name                text not null,
+    url                 text,
+    notes               text,
+    framework_functions text[] not null default '{}',   -- Presentation…Executor
+    category            text,                           -- e.g. "BGP – Daemons"
+    status              text not null default 'approved'
+                          check (status in ('proposed', 'approved', 'deprecated')),
+    source              jsonb not null default '[]'::jsonb,
+    created_by          uuid references auth.users(id) on delete set null,
+    created_at          timestamptz not null default now(),
+    updated_at          timestamptz not null default now(),
+    unique (lower(name))
+);
+```
+
+**RLS / curation model — the `editor` role gets its purpose:**
+
+| Action | Who |
+|---|---|
+| SELECT | any authenticated user (typeahead reads) |
+| INSERT (`status='proposed'`) | any authenticated user — community can suggest tools |
+| INSERT/UPDATE approved rows, approve proposals, deprecate | `editor` or `admin` |
+| DELETE | `admin` |
+
+**Seeding — Python stays the data-ops layer:** a load script in the Python repo (alongside the existing `supabase/` scripts) parses `tools.yml` and upserts the 97 seed tools. The Python repo's ongoing role after Streamlit decommissioning (§6): canonical Pydantic models + schema generation, SQL migrations, and seed/load scripts. `tools.yml` remains the seed source of truth until the table exists, then the table takes over and `tools.json` in this repo becomes a build-time snapshot for JSON-only mode.
+
+**CRUD UI:** a "Tool Catalog" section on the Admin page (and editor-visible variant): list/filter, add, edit, approve proposals, deprecate. Wizard users see a "suggest a tool" affordance inside the typeahead when no match exists (inserts `proposed`; excluded from typeahead until approved).
+
+**Wizard integration (no contract change):** typeahead reads approved tools filtered by the section's framework function; the selected tool *name* is appended to the existing `selections` string arrays — old exports, the Python models, and content hashing are untouched. JSON-only mode falls back to the bundled `tools.json` snapshot.
+
+**Analytics:** with names structured, add the `solution_tools` unnest view (§5a) — per-tool queries ("who uses SuzieQ for collection?") and "top tools by framework function" become exact lookups.
+
 ## 6. Migration Plan
 
 1. **Phase 0 — Contract.** Freeze `wizard_payload.schema.json`; generate Zod types; scaffold Vite+React+TS project (in this mockup folder); wire Supabase client + Google auth against the existing project (new redirect URL).
 2. **Phase 1 — Wizard core.** Store + autosave, puzzle board, all ten forms, tier system, JSON import/export. *Milestone: file-mode feature parity; old and new app exchange JSON.*
 3. **Phase 2 — Catalog.** RLS audit/hardening, save/load/dedup/fork, Public Solutions, Admin.
 4. **Phase 3 — Documents.** Report template port, Gantt, ZIP bundle, preview/highlights, Terms page, landing polish.
-5. **Phase 4 — Cutover.** Deploy to Cloudflare Pages; run both apps in parallel; convert Streamlit deployment to a redirect/notice; retire.
+5. **Phase 4 — Cutover.** *(Revised — decided 2026-07-05: skip the extended parallel run; the Streamlit app will be decommissioned.)* Deploy to Cloudflare Pages; add the production URL to Supabase redirect URLs; convert the Streamlit Cloud deployment to a short retirement notice pointing at the new URL, then remove it. The **Python repo is retained** with a narrowed mission: canonical Pydantic models + `gen_schema.py` (payload contract source of truth), Supabase SQL migrations, and seed/load scripts (e.g. the future tools loader). Its Streamlit UI code is frozen — no further maintenance.
+6. **Phase 5 — Candidates (unscheduled).** FR-19 tool catalog (§5b); community MCP server (§5a); Gantt/report polish beyond Phase 3.
 
 ## 7. Out of Scope / Open Questions
 
 - FastAPI REST API (`api/`): not migrated at launch; revisit if programmatic submission is requested (could become Supabase Edge Functions).
-- The `editor` role currently has no distinct behavior — clarify or drop.
+- ~~The `editor` role currently has no distinct behavior~~ — **resolved 2026-07-05**: editors become tool-catalog curators (§5b) — approve/edit/deprecate tools; solution moderation stays admin-only.
 - ~~Service-role local admin mode~~ — **decided 2026-07-04: dropped** (see §3.6). Admin access = `admin` role in `user_roles` (seed script for self-hosters) + Supabase Studio for raw DB work.
 - Legacy fields (`expected_use`) accepted on import but not shown as editable fields (matches current direction).
 - Exact Gantt library, and whether Gantt exports as PNG (canvas render) or SVG/HTML in the ZIP — decide in Phase 3.

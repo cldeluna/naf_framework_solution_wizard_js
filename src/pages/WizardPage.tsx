@@ -1,9 +1,13 @@
-/** Solution Wizard page — puzzle board, section forms, import/export. */
+/** Solution Wizard page — puzzle board, section forms, artifacts, import/export. */
 import { useWizard } from "../state/store";
 import { completionState } from "../lib/completion";
 import { missingRequired } from "../lib/fieldRegistry";
+import { renderReport } from "../lib/report";
+import { buildGanttSvg, ganttPngBlob } from "../lib/gantt";
+import { buildZip, type ZipEntry } from "../lib/zip";
 import PuzzleBoard from "../components/PuzzleBoard";
 import SectionPanel from "../components/SectionPanel";
+import CatalogActions from "../components/CatalogActions";
 import { ALL_SECTIONS, type SectionKey } from "../data/sections";
 
 function FieldViewToggle() {
@@ -33,21 +37,55 @@ function SaveIndicator() {
   );
 }
 
+function download(blob: Blob, filename: string) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function baseName(title: string) {
+  const t = (title || "untitled").replace(/[^A-Za-z0-9_-]+/g, "_");
+  const ts = new Date().toISOString().replace(/[-:T]/g, "").slice(0, 14);
+  return `naf_report_${t}_${ts}`;
+}
+
 export default function WizardPage() {
   const payload = useWizard((s) => s.payload);
   const openSection = useWizard((s) => s.openSection);
   const reset = useWizard((s) => s.reset);
   const completed = completionState(payload);
+  const anyContent = Object.values(completed).some(Boolean);
+
+  const ganttSvg = buildGanttSvg(payload.timeline.items, payload.initiative.title || "Project Timeline");
+  const reportMd = renderReport(payload, { ganttImagePath: ganttSvg ? "images/Gantt.png" : null });
 
   const exportJson = () => {
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    const title = (payload.initiative.title || "untitled").replace(/[^A-Za-z0-9_-]+/g, "_");
-    const ts = new Date().toISOString().replace(/[-:T]/g, "").slice(0, 14);
-    a.download = `naf_report_${title}_${ts}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+    const full = { ...payload, naf_report_md: reportMd };
+    download(new Blob([JSON.stringify(full, null, 2)], { type: "application/json" }),
+             `${baseName(payload.initiative.title)}.json`);
+  };
+
+  /** ZIP bundle: JSON + Markdown report + Gantt.png + branding icon. */
+  const exportZip = async () => {
+    const base = baseName(payload.initiative.title);
+    const full = { ...payload, naf_report_md: reportMd };
+    const entries: ZipEntry[] = [
+      { name: `${base}.json`, data: JSON.stringify(full, null, 2) },
+      { name: `${base}.md`, data: reportMd },
+    ];
+    if (ganttSvg) {
+      try {
+        const png = await ganttPngBlob(ganttSvg);
+        entries.push({ name: "images/Gantt.png", data: new Uint8Array(await png.arrayBuffer()) });
+      } catch { /* rasterization unavailable — ZIP ships without the PNG */ }
+    }
+    try {
+      const icon = await fetch("images/naf_icon.png");
+      if (icon.ok) entries.push({ name: "images/naf_icon.png", data: new Uint8Array(await icon.arrayBuffer()) });
+    } catch { /* branding icon optional */ }
+    download(buildZip(entries), `${base}.zip`);
   };
 
   const importJson = (file: File) => {
@@ -100,13 +138,28 @@ export default function WizardPage() {
         <p className="callout success">✅ All required fields complete — ready for the catalog.</p>
       )}
 
+      {anyContent && (
+        <details className="catalog-item">
+          <summary>📄 Detailed solution description (preview)</summary>
+          {ganttSvg && (
+            <div className="gantt-wrap" dangerouslySetInnerHTML={{ __html: ganttSvg }} />
+          )}
+          <pre className="report-preview">{reportMd}</pre>
+        </details>
+      )}
+
       <div className="actions">
-        <button onClick={exportJson}>💾 Download JSON</button>
+        <button onClick={exportZip} disabled={!anyContent}
+                title={anyContent ? "JSON + Markdown report + Gantt" : "Fill in a section first"}>
+          📦 Download bundle (JSON + MD + Gantt)
+        </button>
+        <button onClick={exportJson}>💾 JSON only</button>
         <label className="file-btn">
           📂 Load naf_report_*.json
           <input type="file" accept=".json" hidden
                  onChange={(e) => e.target.files?.[0] && importJson(e.target.files[0])} />
         </label>
+        <CatalogActions />
         <button className="danger" onClick={() => confirm("Clear all wizard data?") && reset()}>
           🗑 Reset
         </button>

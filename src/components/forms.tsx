@@ -250,9 +250,43 @@ function ProblemStatementForm() {
                   onChange={(v) => setField("initiative.use_case", v)} />
       </Field>
       <Field label="Workflow description" required
-             hint="Describe the workflow narrative; structured step rows come in a later iteration.">
+             hint="Narrative of the workflow; add structured steps below if useful.">
         <TextArea value={ini.workflow_description} rows={4} maxLength={4000}
                   onChange={(v) => setField("initiative.workflow_description", v)} />
+      </Field>
+      <Field label="Workflow steps (optional)"
+             hint="Ordered steps with a name and description — rendered as a numbered list in the report.">
+        <table className="milestones">
+          <thead><tr><th style={{ width: "30%" }}>Step</th><th>Description</th><th /></tr></thead>
+          <tbody>
+            {ini.workflow_steps.map((row, i) => (
+              <tr key={i}>
+                <td>
+                  <TextInput value={row.name} maxLength={200}
+                             onChange={(v) => setField("initiative.workflow_steps",
+                               ini.workflow_steps.map((r, j) => (j === i ? { ...r, name: v } : r)))} />
+                </td>
+                <td>
+                  <TextInput value={row.description} maxLength={2000}
+                             onChange={(v) => setField("initiative.workflow_steps",
+                               ini.workflow_steps.map((r, j) => (j === i ? { ...r, description: v } : r)))} />
+                </td>
+                <td>
+                  <button type="button" className="row-del" aria-label="Remove step"
+                          onClick={() => setField("initiative.workflow_steps",
+                            ini.workflow_steps.filter((_, j) => j !== i))}>
+                    ✕
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button type="button"
+                onClick={() => setField("initiative.workflow_steps",
+                  [...ini.workflow_steps, { name: "", description: "" }])}>
+          + Add workflow step
+        </button>
       </Field>
       <Field label="Error conditions">
         <TextArea value={ini.error_conditions} rows={3} maxLength={1000}

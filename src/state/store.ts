@@ -55,8 +55,13 @@ export interface WizardStore {
   setFieldView: (v: FieldView) => void;
   setField: (path: string, value: unknown) => void;
   openSection: (key: string | null) => void;
+  /**
+   * Set when the current wizard content was loaded from the catalog — enables
+   * Update-vs-Save-as-new when it's the signed-in user's own initiative.
+   */
+  loadedInitiative: { id: string; ownerId: string | null } | null;
   /** Lenient-load a raw JSON object (file import / DB load). Throws on hard failure. */
-  loadPayload: (raw: unknown) => void;
+  loadPayload: (raw: unknown, from?: { id: string; ownerId: string | null }) => void;
   reset: () => void;
 }
 
@@ -75,13 +80,14 @@ export const useWizard = create<WizardStore>((set) => ({
   setField: (path, value) =>
     set((s) => ({ payload: setPath(s.payload, path, value) })),
   openSection: (key) => set({ activeSection: key }),
-  loadPayload: (raw) => {
+  loadedInitiative: null,
+  loadPayload: (raw, from) => {
     const parsed = WizardPayloadSchema.parse(normalizePayload(raw));
-    set({ payload: parsed });
+    set({ payload: parsed, loadedInitiative: from ?? null });
   },
   reset: () => {
     localStorage.removeItem(DRAFT_KEY);
-    set({ payload: emptyPayload(), draftRestored: false, savedAt: null });
+    set({ payload: emptyPayload(), draftRestored: false, savedAt: null, loadedInitiative: null });
   },
 }));
 
