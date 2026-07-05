@@ -160,6 +160,45 @@ export const STANDARD_RISK_REASONS = [
   "We risk continuing to add technical debt to the logical infrastructure",
 ];
 
+// ── Dependencies & external interfaces checklist ────────────────
+export interface DepDef { label: string; details: boolean; help?: string; defaultDetails?: string }
+export const DEPENDENCY_DEFS: DepDef[] = [
+  { label: "Network Infrastructure", details: false,
+    help: "The automation will act on some or all of the organization's network infrastructure (switches, appliances, routers, etc.)." },
+  { label: "Network Controllers", details: true },
+  { label: "Revision Control system", details: true, defaultDetails: "GitHub",
+    help: "e.g. GitHub, GitLab, Bitbucket" },
+  { label: "ITSM/Change Management System", details: true },
+  { label: "Authentication System", details: true },
+  { label: "IPAMS Systems", details: true },
+  { label: "Inventory Systems", details: true,
+    help: "Source of truth/CMDB/inventory (e.g., NetBox, InfraHub, ServiceNow CMDB). What data do you read/write?" },
+  { label: "Design Data/Intent Systems", details: true,
+    help: "Systems holding golden intent or design models (InfraHub, Custom DB)." },
+  { label: "Observability System", details: true,
+    help: "Telemetry/monitoring/logs/traces (e.g., SuzieQ, Prometheus)." },
+  { label: "Vendor Tool/Management System", details: true,
+    help: "(e.g., Cisco DNAC, Wireless Controllers, Miraki, Arista CVP, Aruba Central, Juniper Apstra)." },
+];
+
+// ── Staffing & timeline ─────────────────────────────────────────
+export const BUILD_BUY_OPTIONS = [
+  "Build In-House",
+  "Build with Professional Services or other external resources (Buy)",
+  "Hybrid",
+];
+export const HOLIDAY_REGIONS = [
+  "None", "United States", "Canada", "United Kingdom", "Germany", "India", "Australia",
+];
+export const DEFAULT_MILESTONES = [
+  { name: "Planning", duration_bd: 5 },
+  { name: "Design", duration_bd: 10 },
+  { name: "Build", duration_bd: 10 },
+  { name: "Test", duration_bd: 5 },
+  { name: "Pilot", duration_bd: 5 },
+  { name: "Production Rollout", duration_bd: 10 },
+];
+
 /** Default title placeholder — used by the completion predicate. */
 export const DEFAULT_TITLE = "My new network automation project";
 

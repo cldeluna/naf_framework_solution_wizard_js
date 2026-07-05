@@ -4,9 +4,11 @@
  * straight to the store (autosaved); selections land in the same
  * payload.selections shape the Python models define.
  */
+import { useEffect } from "react";
 import { useWizard } from "../state/store";
 import * as OPT from "../data/options";
 import { Field, TextInput, TextArea, CheckboxGrid, RadioWithOther, Select } from "./fields";
+import { scheduleItems, approxDuration, iso } from "../lib/schedule";
 import type { SectionKey } from "../data/sections";
 import type { JSX } from "react";
 
@@ -321,13 +323,175 @@ function StakeholdersForm() {
   );
 }
 
-// ── Placeholder for not-yet-built frame pieces ──────────────────
-function ComingSoon({ what }: { what: string }) {
+// ── Dependencies & External Interfaces (frame piece) ────────────
+function DependenciesForm() {
+  const deps = useWizard((s) => s.payload.dependencies);
+  const narrative = useWizard((s) => s.payload.dependencies_narrative);
+  const setField = useWizard((s) => s.setField);
+
+  const entry = (label: string) => deps.find((d) => d.name === label);
+  const setDep = (label: string, on: boolean, defaultDetails = "") => {
+    const rest = deps.filter((d) => d.name !== label);
+    setField("dependencies", on ? [...rest, { name: label, details: defaultDetails }] : rest);
+  };
+  const setDetails = (label: string, details: string) => {
+    setField("dependencies", deps.map((d) => (d.name === label ? { ...d, details } : d)));
+  };
+
   return (
-    <p className="intro">
-      The {what} form arrives in the next iteration. Your other entries are
-      autosaved and unaffected.
-    </p>
+    <>
+      <Field label="Dependencies & external interfaces narrative (Markdown supported)" required
+             hint="Describe the external systems this automation depends on or interfaces with, and how.">
+        <TextArea value={narrative} rows={4} maxLength={4000}
+                  onChange={(v) => setField("dependencies_narrative", v)} />
+      </Field>
+      <Field label="External systems this automation will interact with">
+        <div>
+          {OPT.DEPENDENCY_DEFS.map((d) => {
+            const cur = entry(d.label);
+            return (
+              <div key={d.label} style={{ marginBottom: 4 }}>
+                <label className="check">
+                  <input type="checkbox" checked={!!cur}
+                         onChange={(e) => setDep(d.label, e.target.checked, d.defaultDetails ?? "")} />
+                  <span>{d.label}</span>
+                </label>
+                {d.help && <span className="field-hint" style={{ marginLeft: "1.6rem" }}>{d.help}</span>}
+                {cur && d.details && (
+                  <div style={{ marginLeft: "1.6rem", marginTop: 4 }}>
+                    <TextInput value={cur.details} maxLength={500}
+                               placeholder={`Details for ${d.label}`}
+                               onChange={(v) => setDetails(d.label, v)} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Field>
+    </>
+  );
+}
+
+// ── Staffing, Timeline & Milestones (frame piece) ───────────────
+function TimelineForm() {
+  const tl = useWizard((s) => s.payload.timeline);
+  const setField = useWizard((s) => s.setField);
+
+  const writeSchedule = (startDate: string, items: typeof tl.items) => {
+    const res = scheduleItems(startDate, items);
+    setField("timeline.start_date", startDate);
+    setField("timeline.items", res.items);
+    setField("timeline.total_business_days", res.totalBd);
+    setField("timeline.projected_completion", res.projectedCompletion);
+  };
+
+  const startDate = tl.start_date || iso(new Date());
+  const items = tl.items.length
+    ? tl.items
+    : OPT.DEFAULT_MILESTONES.map((m) => ({ name: m.name, duration_bd: m.duration_bd, start: "", end: "", notes: "" }));
+
+  // seed the default template (with computed dates) on first open
+  const needsSeed = tl.items.length === 0;
+  useEffect(() => {
+    if (needsSeed) writeSchedule(startDate, items);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [needsSeed]);
+
+  const setRow = (i: number, patch: Partial<(typeof items)[number]>) => {
+    writeSchedule(startDate, items.map((r, j) => (j === i ? { ...r, ...patch } : r)));
+  };
+
+  return (
+    <>
+      <p className="intro">
+        Capture a high-level plan with durations in business days. The start
+        date drives scheduled dates (weekends skipped; holiday-calendar
+        skipping by region is a planned refinement). If two people work a
+        10-day step in parallel, model it as 5–6 days.
+      </p>
+
+      <h3>Staffing plan</h3>
+      <Field label="Development approach" required>
+        <div className="radio-group">
+          {OPT.BUILD_BUY_OPTIONS.map((opt) => (
+            <label key={opt} className="check">
+              <input type="radio" name="bb" checked={tl.build_buy === opt}
+                     onChange={() => setField("timeline.build_buy", opt)} />
+              <span>{opt}</span>
+            </label>
+          ))}
+        </div>
+      </Field>
+      <div className="two-col">
+        <Field label="Direct staff on project"
+               hint="Direct employees from your team or another team in your organization.">
+          <input type="number" min={0} step={1} value={tl.staff_count}
+                 onChange={(e) => setField("timeline.staff_count", Math.max(0, Number(e.target.value) || 0))} />
+        </Field>
+        <Field label="Professional services staff" hint="External staff working on the project.">
+          <input type="number" min={0} step={1} value={tl.external_staff_count}
+                 onChange={(e) => setField("timeline.external_staff_count", Math.max(0, Number(e.target.value) || 0))} />
+        </Field>
+      </div>
+      <Field label="Staffing plan (Markdown supported)" required>
+        <TextArea value={tl.staffing_plan_md} rows={4}
+                  onChange={(v) => setField("timeline.staffing_plan_md", v)} />
+      </Field>
+
+      <h3>Timeline & milestones</h3>
+      <div className="two-col">
+        <Field label="Holiday calendar" hint="Recorded for business-day math; region skipping lands with the holiday library.">
+          <select value={tl.holiday_region || "None"}
+                  onChange={(e) => setField("timeline.holiday_region", e.target.value)}>
+            {OPT.HOLIDAY_REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </Field>
+        <Field label="Project start date">
+          <input type="date" value={startDate}
+                 onChange={(e) => writeSchedule(e.target.value, items)} />
+        </Field>
+      </div>
+
+      <Field label="Milestones" hint="Name, duration in business days, notes. Dates are computed.">
+        <table className="milestones">
+          <thead>
+            <tr><th>Milestone</th><th>Days</th><th>Start</th><th>End</th><th>Notes</th><th /></tr>
+          </thead>
+          <tbody>
+            {items.map((row, i) => (
+              <tr key={i}>
+                <td><TextInput value={row.name} maxLength={100} onChange={(v) => setRow(i, { name: v })} /></td>
+                <td>
+                  <input type="number" min={0} step={1} value={row.duration_bd}
+                         onChange={(e) => setRow(i, { duration_bd: Math.max(0, Number(e.target.value) || 0) })} />
+                </td>
+                <td className="date-cell">{row.start}</td>
+                <td className="date-cell">{row.end}</td>
+                <td><TextInput value={row.notes} maxLength={500} onChange={(v) => setRow(i, { notes: v })} /></td>
+                <td>
+                  <button type="button" className="row-del" aria-label="Remove row"
+                          onClick={() => writeSchedule(startDate, items.filter((_, j) => j !== i))}>
+                    ✕
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button type="button"
+                onClick={() => writeSchedule(startDate, [...items, { name: "", duration_bd: 0, start: "", end: "", notes: "" }])}>
+          + Add milestone row
+        </button>
+      </Field>
+
+      {tl.projected_completion && (
+        <p className="callout success">
+          📅 Expected delivery: <strong>{tl.projected_completion}</strong>
+          {" "}({tl.total_business_days} business days, {approxDuration(tl.total_business_days)})
+        </p>
+      )}
+    </>
   );
 }
 
@@ -340,6 +504,6 @@ export const FORMS: Record<SectionKey, () => JSX.Element> = {
   executor: ExecutorForm,
   problem_statement: ProblemStatementForm,
   stakeholders: StakeholdersForm,
-  dependencies: () => <ComingSoon what="Dependencies & External Interfaces" />,
-  staffing_timeline: () => <ComingSoon what="Staffing, Timeline & Milestones" />,
+  dependencies: DependenciesForm,
+  staffing_timeline: TimelineForm,
 };
