@@ -9,7 +9,18 @@ import { buildZip, type ZipEntry } from "../lib/zip";
 import PuzzleBoard from "../components/PuzzleBoard";
 import SectionPanel from "../components/SectionPanel";
 import CatalogActions from "../components/CatalogActions";
-import { ALL_SECTIONS, type SectionKey } from "../data/sections";
+import { FRAME_SECTIONS, INNER_SECTIONS, type SectionKey } from "../data/sections";
+import type { ReactNode } from "react";
+
+/** Labeled button group — structure for the controls below the puzzle. */
+function Group({ title, children, danger }: { title: string; children: ReactNode; danger?: boolean }) {
+  return (
+    <section className={danger ? "btn-group danger-group" : "btn-group"}>
+      <h4 className="btn-group-title">{title}</h4>
+      <div className="btn-group-body">{children}</div>
+    </section>
+  );
+}
 
 function FieldViewToggle() {
   const view = useWizard((s) => s.fieldView);
@@ -115,20 +126,32 @@ export default function WizardPage() {
 
       <PuzzleBoard completed={completed} onOpen={(k) => openSection(k)} />
 
-      <div className="section-buttons">
-        {ALL_SECTIONS.map((s) => {
+      {(() => {
+        const sectionBtn = (s: { key: string; label: string; color: string; icon: string; tag?: string }) => {
           const key = s.key as SectionKey;
           const missing = missingRequired(payload, key).length;
           return (
             <button key={s.key} className="section-btn"
                     style={{ borderColor: s.color }}
-                    title={missing ? `${missing} required field(s) missing` : undefined}
+                    title={missing ? "Has required fields still to complete" : undefined}
                     onClick={() => openSection(s.key)}>
-              {missing > 0 ? "⚠️" : completed[key] ? "✅" : s.icon} {s.label}
+              {completed[key] ? "✅" : s.icon}{" "}
+              {s.tag && <span className="tag-chip" style={{ background: s.color }}>{s.tag}</span>}{" "}
+              {s.label}
             </button>
           );
-        })}
-      </div>
+        };
+        return (
+          <div className="btn-groups">
+            <Group title="🧩 Puzzle Border — Project Context">
+              {FRAME_SECTIONS.map(sectionBtn)}
+            </Group>
+            <Group title="⚙️ Solution — NAF Framework Components">
+              {INNER_SECTIONS.map(sectionBtn)}
+            </Group>
+          </div>
+        );
+      })()}
 
       {missingRequired(payload).length > 0 ? (
         <p className="callout warn">
@@ -151,21 +174,29 @@ export default function WizardPage() {
         </details>
       )}
 
-      <div className="actions">
-        <button onClick={exportZip} disabled={!anyContent}
-                title={anyContent ? "JSON + Markdown report + Gantt" : "Fill in a section first"}>
-          📦 Download bundle (JSON + MD + Gantt)
-        </button>
-        <button onClick={exportJson}>💾 JSON only</button>
-        <label className="file-btn">
-          📂 Load naf_report_*.json
-          <input type="file" accept=".json" hidden
-                 onChange={(e) => e.target.files?.[0] && importJson(e.target.files[0])} />
-        </label>
-        <CatalogActions />
-        <button className="danger" onClick={() => confirm("Clear all wizard data?") && reset()}>
-          🗑 Reset
-        </button>
+      <div className="btn-groups">
+        <Group title="📂 Open">
+          <label className="file-btn">
+            Load naf_report_*.json
+            <input type="file" accept=".json" hidden
+                   onChange={(e) => e.target.files?.[0] && importJson(e.target.files[0])} />
+          </label>
+        </Group>
+        <Group title="💾 Download">
+          <button onClick={exportZip} disabled={!anyContent}
+                  title={anyContent ? "JSON + Markdown report + Gantt" : "Fill in a section first"}>
+            📦 Bundle (JSON + MD + Gantt)
+          </button>
+          <button onClick={exportJson}>JSON only</button>
+        </Group>
+        <Group title="🗄 Shared Catalog">
+          <CatalogActions />
+        </Group>
+        <Group title="⚠️ Danger Zone" danger>
+          <button className="danger" onClick={() => confirm("Clear all wizard data?") && reset()}>
+            🗑 Reset wizard
+          </button>
+        </Group>
       </div>
 
       <SectionPanel />

@@ -20,6 +20,8 @@ export interface FrameSection {
   position: "top" | "left" | "right" | "bottom";
   scatter: { x: number; y: number; rot: number };
   icon: string;
+  /** Business framing tag (the WHY/WHO/WHEN/WHAT of the landing pitch). */
+  tag: string;
 }
 
 export const INNER_SECTIONS: InnerSection[] = [
@@ -32,10 +34,10 @@ export const INNER_SECTIONS: InnerSection[] = [
 ];
 
 export const FRAME_SECTIONS: FrameSection[] = [
-  { key: "problem_statement", label: "Problem Statement & Use Case", color: "#A8B8C8", position: "top",    scatter: { x: 0,   y: -30, rot: 2 },  icon: "📋" },
-  { key: "stakeholders",      label: "Stakeholders",                 color: "#708898", position: "left",   scatter: { x: -30, y: 0,   rot: -3 }, icon: "👥" },
-  { key: "staffing_timeline", label: "Staffing & Timeline",          color: "#B0A090", position: "right",  scatter: { x: 30,  y: 0,   rot: 3 },  icon: "📅" },
-  { key: "dependencies",      label: "Dependencies",                 color: "#607888", position: "bottom", scatter: { x: 0,   y: 30,  rot: -2 }, icon: "🔗" },
+  { key: "problem_statement", label: "Problem Statement & Use Case", color: "#A8B8C8", position: "top",    scatter: { x: 0,   y: -30, rot: 2 },  icon: "🎯", tag: "WHY" },
+  { key: "stakeholders",      label: "Stakeholders & My Role",       color: "#708898", position: "left",   scatter: { x: -30, y: 0,   rot: -3 }, icon: "🤝", tag: "WHO" },
+  { key: "staffing_timeline", label: "Staffing & Timeline",          color: "#B0A090", position: "right",  scatter: { x: 30,  y: 0,   rot: 3 },  icon: "📅", tag: "WHEN" },
+  { key: "dependencies",      label: "Dependencies",                 color: "#607888", position: "bottom", scatter: { x: 0,   y: 30,  rot: -2 }, icon: "🔗", tag: "WHAT" },
 ];
 
 export const ALL_SECTIONS: { key: SectionKey; label: string; color: string; icon: string }[] = [
