@@ -14,6 +14,22 @@ settings). Check items off as done.
 - [ ] Optional: delete `dist/` — contains output from a sandbox build; your own
       `npm run build` regenerates it (it's git-ignored anyway).
 
+## Git
+
+- [ ] **Delete stale git lock/temp files** left by the sandbox commit (Claude
+      can create but not delete files here). Until removed, git commands will
+      fail with "…lock exists". From the mockup folder run:
+
+      ```bash
+      rm -f .git/HEAD.lock .git/index.lock .git/objects/maintenance.lock
+      find .git/objects -name 'tmp_obj_*' -delete
+      git status   # should be clean apart from scripts/validate-export.mjs
+      ```
+
+- [ ] Optional: create the GitHub repo and push (`git remote add origin … &&
+      git push -u origin main`). Initial commit `a5bd33c` is already made with
+      your name/email as author.
+
 ## Environment / settings
 
 - [x] Reinstall `node_modules` natively after the Linux-sandbox install
@@ -30,4 +46,7 @@ settings). Check items off as done.
 - Claude runs installs/builds in a Linux sandbox; **`npm install` and
   `npm run build` should be run on your Mac**, not by Claude. Claude verifies
   with `tsc` (pure JS, platform-safe) instead.
+- **Git commits should also be run on your Mac** — commits from Claude's side
+  leave undeletable lock files behind (see Git section above). Claude will
+  stage nothing and instead suggest commit messages.
 - New manual items get appended here as they come up.

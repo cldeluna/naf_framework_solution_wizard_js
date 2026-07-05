@@ -41,12 +41,18 @@ function setPath<T>(obj: T, path: string, value: unknown): T {
   return root as T;
 }
 
+export type FieldView = "all" | "required";
+const VIEW_KEY = "naf-wizard-field-view";
+
 export interface WizardStore {
   payload: WizardPayload;
   /** True when this session started from a restored localStorage draft. */
   draftRestored: boolean;
   savedAt: number | null;
   activeSection: string | null;
+  /** Global field view: "required" hides optional fields (compact). */
+  fieldView: FieldView;
+  setFieldView: (v: FieldView) => void;
   setField: (path: string, value: unknown) => void;
   openSection: (key: string | null) => void;
   /** Lenient-load a raw JSON object (file import / DB load). Throws on hard failure. */
@@ -61,6 +67,11 @@ export const useWizard = create<WizardStore>((set) => ({
   draftRestored: initial.restored,
   savedAt: null,
   activeSection: null,
+  fieldView: (localStorage.getItem(VIEW_KEY) as FieldView) || "all",
+  setFieldView: (v) => {
+    localStorage.setItem(VIEW_KEY, v);
+    set({ fieldView: v });
+  },
   setField: (path, value) =>
     set((s) => ({ payload: setPath(s.payload, path, value) })),
   openSection: (key) => set({ activeSection: key }),

@@ -3,10 +3,17 @@
  * store on every change — no submit step, no data loss on close/navigation.
  */
 import type { ReactNode } from "react";
+import { useWizard } from "../state/store";
 
-export function Field({ label, required, children, hint }: {
-  label: string; required?: boolean; hint?: string; children: ReactNode;
+/**
+ * Field wrapper. In the global "Required only" view (SPEC §2.4), optional
+ * fields are hidden — only required/recommended fields render.
+ */
+export function Field({ label, required, recommended, children, hint }: {
+  label: string; required?: boolean; recommended?: boolean; hint?: string; children: ReactNode;
 }) {
+  const compact = useWizard((s) => s.fieldView) === "required";
+  if (compact && !required && !recommended) return null;
   return (
     <label className="field">
       <span className="field-label">

@@ -5,6 +5,7 @@
 import { useWizard } from "../state/store";
 import { sectionMeta, type SectionKey } from "../data/sections";
 import { isSectionComplete } from "../lib/completion";
+import { missingRequired } from "../lib/fieldRegistry";
 import { FORMS } from "./forms";
 
 export default function SectionPanel() {
@@ -30,6 +31,12 @@ export default function SectionPanel() {
           </button>
         </header>
         <div className="panel-body">
+          {missingRequired(payload, active).length > 0 && (
+            <p className="callout warn small">
+              Required for catalog save:{" "}
+              {missingRequired(payload, active).map((f) => f.label).join(", ")}
+            </p>
+          )}
           <Form />
         </div>
         <footer className="panel-footer">

@@ -7,6 +7,7 @@
 import type { WizardPayload } from "../types/wizardPayload";
 import type { SectionKey } from "../data/sections";
 import { DEFAULT_TITLE, DEFAULT_MILESTONE_NAMES } from "../data/options";
+import { missingRequired } from "./fieldRegistry";
 
 const nonEmpty = (s: unknown): boolean => typeof s === "string" && s.trim().length > 0;
 const any = (a: unknown): boolean => Array.isArray(a) && a.length > 0;
@@ -18,7 +19,19 @@ function milestonesEdited(items: WizardPayload["timeline"]["items"]): boolean {
   return ![...names].every((n) => DEFAULT_MILESTONE_NAMES.has(n));
 }
 
+/**
+ * A piece snaps home only when BOTH hold:
+ * 1. its required fields (field registry) are all filled, and
+ * 2. the section has meaningful content (original heuristics below).
+ * (Deliberate improvement over the Streamlit app, which snapped on any
+ * meaningful data even with required fields missing.)
+ */
 export function isSectionComplete(p: WizardPayload, key: SectionKey): boolean {
+  if (missingRequired(p, key).length > 0) return false;
+  return hasMeaningfulContent(p, key);
+}
+
+function hasMeaningfulContent(p: WizardPayload, key: SectionKey): boolean {
   switch (key) {
     // inner (framework) pieces
     case "presentation":

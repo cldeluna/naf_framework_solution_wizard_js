@@ -179,7 +179,7 @@ Pure React SVG (`<PuzzleBoard>`): pieces are components with click handlers — 
 
 FRs marked **[P1]** are launch-blocking; **[P2]** fast-follow; **[P3]** nice-to-have.
 
-- **FR-1 [P1]** Puzzle board with 4 frame + 6 inner pieces, exact current sections/colors, derived completion, scatter/snap animation, click-to-open forms, n/10 progress.
+- **FR-1 [P1]** Puzzle board with 4 frame + 6 inner pieces, exact current sections/colors, derived completion, scatter/snap animation, click-to-open forms, n/10 progress. *Deliberate change (decided 2026-07-04): a piece snaps home only when the section's required-tier fields are all complete AND it has meaningful content — the Streamlit app snapped on any meaningful data.*
 - **FR-2 [P1]** All ten section forms with the full field inventory of §2.3, including custom/Other patterns, sentinel-free selects, and Markdown-supported text areas.
 - **FR-3 [P1]** Field-importance tiers: Required-only vs All-fields view toggle; required-field badges; save blocked until required tier satisfied.
 - **FR-4 [P1]** Continuous local autosave + draft restore; no user action can silently discard entered data.
@@ -188,7 +188,7 @@ FRs marked **[P1]** are launch-blocking; **[P2]** fast-follow; **[P3]** nice-to-
 - **FR-7 [P1]** Google sign-in (Supabase); signed-out users retain full wizard + file export.
 - **FR-8 [P1]** Save to catalog: validate → initiative+solution decomposition, per-owner content-hash dedup, Update vs Save-as-new, fork-on-edit of others' designs, solution name + contact opt-in.
 - **FR-9 [P1]** Load from catalog: list own + browse all; rehydrate wizard from any solution.
-- **FR-10 [P2]** Public Solutions page: grouped read-only browse, `contact_ok` privacy rule.
+- **FR-10 [P2]** Solutions catalog page: grouped browse for signed-in users, `contact_ok` privacy rule, load-into-wizard (fork). *Decided 2026-07-04 — upgrade over the original's read-only page: owners get full CRUD on their own initiatives/solutions directly from this page (edit via load-into-wizard → Update; delete own records), enforced by RLS (`owner_id = auth.uid()`). Admins retain delete-anything.*
 - **FR-11 [P2]** Admin page: contact always visible, delete solution/initiative (cascade), role management.
 - **FR-12 [P2]** Timeline engine: business-day scheduling with regional holiday calendars (JS lib e.g. `date-holidays`), default milestone template, projected-completion callouts, Gantt render.
 - **FR-13 [P2]** Live report preview + Solution Highlights summary.
