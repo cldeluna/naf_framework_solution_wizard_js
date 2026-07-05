@@ -187,7 +187,7 @@ function db() {
 export async function listCatalog(): Promise<{ initiatives: InitiativeRow[]; solutions: SolutionRow[] }> {
   const [ini, sol] = await Promise.all([
     db().from("initiatives")
-      .select("id, owner_id, author, title, description, category, problem_statement, use_case, submitter_name, submitter_email, contact_ok, created_at, updated_at")
+      .select("id, owner_id, author, title, description, itil_category, category, problem_statement, use_case, submitter_name, submitter_email, contact_ok, created_at, updated_at")
       .order("created_at", { ascending: false }).limit(200),
     db().from("solutions")
       .select("id, initiative_id, owner_id, name, status, deployment_strategy, version, submitter_name, submitter_email, contact_ok, created_at")

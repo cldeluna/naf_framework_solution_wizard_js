@@ -61,7 +61,7 @@ A live preview ("📄 Detailed solution description") shows the rendered report 
 Available to signed-in users. The catalog is a **card grid** — one summary card per initiative, everything visible without expanding anything:
 
 - Each card shows the **title**, **ITIL practice + category chips** (the card's top edge is color-coded by ITIL practice, matching the puzzle palette), a short **problem-statement snippet**, the submitter/date/solution-count line, and every **solution inline** with its deployment-strategy chip.
-- **🔎 Search box** filters live across title, problem statement, use case, category, and author; **filter chips** (one per ITIL practice present in the catalog) narrow the grid with a click.
+- **🔎 Search box** filters live across title, problem statement, use case, category, and author; an **ITIL category dropdown** beside it narrows the grid to one practice — it always lists all eight practices with a count of how many initiatives each holds.
 - **📥 Load** on any solution row pulls that design into the Wizard in one click. Saving afterward forks it under your account unless it's yours and you choose Update.
 - **🗑 Delete** — on solution rows you own (and, for admins, on anything); owners/admins also get a card-footer delete for the whole initiative + its solutions.
 - Submitter contact (name/email) is shown only if the submitter opted in when saving; a **mine** tag marks your own records.
