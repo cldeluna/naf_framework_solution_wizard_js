@@ -3,12 +3,7 @@
  * store on every change — no submit step, no data loss on close/navigation.
  */
 import type { ReactNode } from "react";
-import { useWizard } from "../state/store";
-
-/** True when the global field view is Compact ("Required only"). */
-export function useCompact(): boolean {
-  return useWizard((s) => s.fieldView) === "required";
-}
+import { useCompact } from "../hooks/useCompact";
 
 /**
  * Renders children only in the Detailed view — for headings/blocks whose

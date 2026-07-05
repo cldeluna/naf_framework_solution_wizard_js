@@ -14,6 +14,8 @@
  * Saving (validate-for-save) stays strict per SPEC §2.5.
  */
 
+import { ITIL_CATEGORIES, LEGACY_ITIL_ALIASES, itilParentOf } from "../data/options";
+
 const HTML_TAG_RE = /<[^>]+>/g;
 // control chars except \t \n \r
 const CONTROL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
@@ -79,6 +81,23 @@ export function normalizePayload(raw: unknown): unknown {
   const ini = data["initiative"] as Record<string, unknown> | undefined;
   if (ini && !ini["use_case"] && typeof ini["expected_use"] === "string" && ini["expected_use"]) {
     ini["use_case"] = ini["expected_use"];
+  }
+
+  // itil_category derivation for pre-split data (2026-07-05 two-level
+  // categories): derive the ITIL parent from the category tree; if the legacy
+  // category IS an ITIL value (current or pre-rename alias), promote it and
+  // clear the common one.
+  if (ini && !ini["itil_category"] && typeof ini["category"] === "string" && ini["category"]) {
+    const cat = ini["category"] as string;
+    const asItil = ITIL_CATEGORIES.includes(cat) ? cat : LEGACY_ITIL_ALIASES[cat];
+    if (asItil) {
+      ini["itil_category"] = asItil;
+      ini["category"] = "";
+    } else {
+      const parent = itilParentOf(cat);
+      if (parent) ini["itil_category"] = parent;
+      // unknown/Other free text: itil_category stays empty for the user to set
+    }
   }
 
   return data;

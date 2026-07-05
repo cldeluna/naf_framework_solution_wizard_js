@@ -28,6 +28,7 @@ export function renderReport(p: WizardPayload, opts?: { ganttImagePath?: string 
   md += `Author:\n${has(ini.author) ? ini.author : "Author information not provided."}\n\n`;
 
   md += section("Scope", ini.description || "");
+  md += section("ITIL Category", has(ini.itil_category) ? ini.itil_category : "ITIL category input was not provided.");
   md += section("Category", has(ini.category) ? ini.category : "Category input was not provided.");
   md += section("Problem Statement", has(ini.problem_statement) ? ini.problem_statement : "Problem statement input was not provided.");
   if (has(ini.use_case)) md += section("Use Case", ini.use_case);

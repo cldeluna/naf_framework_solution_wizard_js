@@ -114,6 +114,7 @@ async function decompose(p: WizardPayload, o: SaveOptions) {
     author: ini.author || null,
     title: ini.title,
     description: ini.description || null,
+    itil_category: ini.itil_category || null,
     category: ini.category || null,
     problem_statement: ini.problem_statement || null,
     use_case: ini.use_case || null,
@@ -155,6 +156,7 @@ export function toWizardPayload(initiative: Record<string, unknown>, solution: R
   const payload: Record<string, unknown> = {
     initiative: {
       author: g("author"), title: g("title"), description: g("description"),
+      itil_category: g("itil_category"),
       category: g("category"), problem_statement: g("problem_statement"),
       use_case: g("use_case"), expected_use: g("expected_use"),
       error_conditions: g("error_conditions"), assumptions: g("assumptions"),

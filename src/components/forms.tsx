@@ -237,9 +237,25 @@ function ProblemStatementForm() {
         <TextArea value={ini.description} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.description", v)} />
       </Field>
-      <Field label="Category" required>
-        <Select options={OPT.USE_CASE_CATEGORIES} value={ini.category} allowOther
-                onChange={(v) => setField("initiative.category", v)} />
+      <Field label="ITIL Category" required
+             hint="The ITIL 4/5 practice this initiative falls under.">
+        <Select options={OPT.ITIL_CATEGORIES} value={ini.itil_category}
+                onChange={(v) => {
+                  setField("initiative.itil_category", v);
+                  // changing practice invalidates a previously picked common category
+                  if (ini.category && !(OPT.CATEGORY_TREE[v] ?? []).includes(ini.category)) {
+                    setField("initiative.category", "");
+                  }
+                }} />
+      </Field>
+      <Field label="Category" required
+             hint={ini.itil_category ? "Common categories for the selected ITIL practice — or Other." : "Select an ITIL Category first."}>
+        {ini.itil_category ? (
+          <Select options={OPT.CATEGORY_TREE[ini.itil_category] ?? []} value={ini.category} allowOther
+                  onChange={(v) => setField("initiative.category", v)} />
+        ) : (
+          <select disabled><option>— Select an ITIL Category first —</option></select>
+        )}
       </Field>
       <Field label="Problem statement" required>
         <TextArea value={ini.problem_statement} rows={4} maxLength={2000}

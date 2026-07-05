@@ -25,6 +25,7 @@ export const REGISTRY: FieldSpec[] = [
   { id: "author", label: "Author", path: "initiative.author", section: "problem_statement", tier: "required" },
   { id: "title", label: "Title", path: "initiative.title", section: "problem_statement", tier: "required" },
   { id: "description", label: "Description", path: "initiative.description", section: "problem_statement", tier: "required" },
+  { id: "itil_category", label: "ITIL Category", path: "initiative.itil_category", section: "problem_statement", tier: "required" },
   { id: "category", label: "Category", path: "initiative.category", section: "problem_statement", tier: "required" },
   { id: "problem_statement", label: "Problem Statement", path: "initiative.problem_statement", section: "problem_statement", tier: "required" },
   { id: "use_case", label: "Use Case", path: "initiative.use_case", section: "problem_statement", tier: "required" },

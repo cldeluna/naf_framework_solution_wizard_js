@@ -115,32 +115,191 @@ export const STAKEHOLDER_CATALOG: Record<string, string[]> = {
   ],
 };
 
-// ── Use-case categories (use_case_categories.yml keys) ──────────
-export const USE_CASE_CATEGORIES = [
-  "Configuration Management ITIL4/5",
-  "Troubleshooting - Problem Management ITIL4/5",
-  "Incident Management ITIL4/5",
-  "Monitoring/Observability ITIL4/5",
-  "Capacity Management ITIL4/5",
-  "Change Management ITIL4/5",
-  "Device Onboarding",
-  "Software Upgrades",
-  "State Verification and Compliance",
-  "Self-Service Tools",
-  "Network Inventory and Discovery",
-  "Monitoring and Troubleshooting",
-  "Policy and Security Management",
-  "Orchestration and Workflow Automation",
-  "Cloud and Hybrid Network Integration",
-  "Intent-Based Automation",
-  "Application Connectivity",
-  "Peer Validation",
-  "End User Testing",
-  "Text Summary",
-  "Observability",
-  "Incident Response",
-  "Security Policy Management",
-];
+// ── Two-level categories (2026-07-05) ───────────────────────────
+// Level 1: ITIL 4/5 practice (required). Level 2: common category beneath it
+// (required; Other + free text supported). CATEGORY_TREE is the curated
+// mapping — DRAFT grouping, adjust as community feedback arrives.
+export type CategoryMetadata = {
+  framework?: "ITIL";
+  frameworkVersion?: "ITIL 4" | "ITIL 5" | "ITIL 4 / ITIL 5 aligned";
+  practiceType?: "Service Management" | "General Management" | "Technical Management";
+};
+
+export const CATEGORY_TREE: Record<string, string[]> = {
+  "Service Configuration Management": [
+    "Network Inventory and Discovery",
+    "Device and Interface Inventory",
+    "Topology and Dependency Mapping",
+    "Configuration Backup and Versioning",
+    "Configuration Drift Detection",
+    "State Verification and Compliance",
+    "Source of Truth Integration",
+    "Intent-Based Automation",
+    "Network State Summary",
+    "Configuration Explanation",
+    "Inventory and Configuration Reporting",
+    "Configuration Summary and Documentation",
+  ],
+
+  "Change Enablement": [
+    "Software Upgrades",
+    "Device Onboarding",
+    "Configuration Changes",
+    "Configuration Generation",
+    "Pre-Change Impact Analysis",
+    "Change Risk Assessment",
+    "Maintenance Window Planning",
+    "Orchestration and Workflow Automation",
+    "Change Validation and Rollback",
+    "Self-Service Tools",
+    "Cloud and Hybrid Network Integration",
+    "Pre-Change Data Collection",
+    "Post-Change Validation"
+  ],
+
+  "Incident Management": [
+    "Incident Response",
+    "Monitoring and Troubleshooting",
+    "Alert Triage",
+    "Outage Detection",
+    "Service Restoration",
+    "Escalation Support",
+    "Packet Capture and Log Collection",
+    "Runbook Automation",
+    "Diagnostic Data Collection",
+    "Incident Reporting and Documentation",
+  ],
+
+  "Problem Management": [
+    "Root Cause Analysis",
+    "Application Connectivity",
+    "Peer Validation",
+    "End User Testing",
+    "Recurring Issue Detection",
+    "Known Error Documentation",
+    "Post-Incident Review",
+    "Baseline Comparison",
+  ],
+
+  "Monitoring and Event Management": [
+    "Observability",
+    "Telemetry Collection",
+    "Show Command Collection",
+    "Event Correlation",
+    "Alerting and Notification",
+    "Synthetic Testing",
+    "Network Health Dashboards",
+    "Log and Metric Analysis",
+    "Anomaly Detection",
+  ],
+
+  "Capacity and Performance Management": [
+    "Bandwidth Utilization",
+    "Interface Error Analysis",
+    "Wireless Capacity Planning",
+    "WAN Performance Analysis",
+    "Latency and Packet Loss Analysis",
+    "Throughput Testing",
+    "Growth Forecasting",
+    "Capacity Reporting",
+  ],
+
+  "Information Security Management": [
+    "Security Policy Management",
+    "Policy and Security Management",
+    "Access Control Validation",
+    "Segmentation Compliance",
+    "Firewall Rule Review",
+    "NAC and Device Profiling",
+    "Vulnerability Exposure Review",
+    "Certificate and Crypto Validation",
+    "Secure Configuration Compliance",
+  ],
+
+  "Service Validation and Testing": [
+  "Digital Twin Testing",
+  "Lab Validation",
+  "Pre-Change Testing",
+  "Post-Change Testing",
+  "Automated Test Suites",
+  "Regression Testing",
+  "Failure Scenario Testing",
+  "Design Validation",
+],
+};
+
+export const CATEGORY_METADATA: Record<keyof typeof CATEGORY_TREE, CategoryMetadata> = {
+  "Service Configuration Management": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+  "Change Enablement": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+  "Incident Management": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+  "Problem Management": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+  "Monitoring and Event Management": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+  "Capacity and Performance Management": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+  "Information Security Management": {
+    framework: "ITIL",
+    frameworkVersion: "ITIL 4 / ITIL 5 aligned",
+    practiceType: "Service Management",
+  },
+};
+
+export const ITIL_CATEGORIES = Object.keys(CATEGORY_TREE);
+
+/**
+ * Legacy ITIL parent names (pre-2026-07-05 exports) -> current practice names.
+ * When a legacy export stored one of these in `category`, it is promoted to
+ * itil_category (and the common category left for the user to pick).
+ */
+export const LEGACY_ITIL_ALIASES: Record<string, string> = {
+  "Configuration Management ITIL4/5": "Service Configuration Management",
+  "Change Management ITIL4/5": "Change Enablement",
+  "Incident Management ITIL4/5": "Incident Management",
+  "Troubleshooting - Problem Management ITIL4/5": "Problem Management",
+  "Monitoring/Observability ITIL4/5": "Monitoring and Event Management",
+  "Capacity Management ITIL4/5": "Capacity and Performance Management",
+  "Information Security Management ITIL4/5": "Information Security Management",
+};
+
+/** Legacy leaf categories that no longer exist in the tree -> their parent. */
+export const LEGACY_LEAF_PARENT: Record<string, string> = {
+  "Text Summary": "Service Configuration Management",
+  "Configuration Management": "Service Configuration Management",
+};
+
+/** Reverse lookup: common category -> its ITIL parent (legacy derivation). */
+export function itilParentOf(category: string): string {
+  for (const [itil, cats] of Object.entries(CATEGORY_TREE)) {
+    if (cats.includes(category)) return itil;
+  }
+  if (LEGACY_LEAF_PARENT[category]) return LEGACY_LEAF_PARENT[category];
+  // legacy exports sometimes stored the ITIL value itself in `category`
+  if (ITIL_CATEGORIES.includes(category)) return category;
+  if (LEGACY_ITIL_ALIASES[category]) return LEGACY_ITIL_ALIASES[category];
+  return "";
+}
 
 // ── Deployment strategies (deployment_strategies.yml keys) ──────
 export const DEPLOYMENT_STRATEGIES = [

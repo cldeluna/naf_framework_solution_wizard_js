@@ -6,7 +6,7 @@ import { useWizard } from "../state/store";
 import { sectionMeta, type SectionKey } from "../data/sections";
 import { isSectionComplete } from "../lib/completion";
 import { missingRequired } from "../lib/fieldRegistry";
-import { useCompact } from "./fields";
+import { useCompact } from "../hooks/useCompact";
 import { FORMS } from "./forms";
 
 /** Right-aligned badge mirroring the global field-view (port of render_view_badge). */

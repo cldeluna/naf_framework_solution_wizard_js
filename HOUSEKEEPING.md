@@ -6,17 +6,17 @@ settings). Check items off as done.
 
 ## File cleanup
 
-- [ ] Delete `scripts/validate-export.mjs` — stale; replaced by
+- [x] Delete `scripts/validate-export.mjs` — stale; replaced by
       `scripts/validate-export.mts` (`npm run validate:export -- <file>` points
       to the new one).
-- [ ] Delete `src/App.css` — leftover from the Vite template; no longer
+- [x] Delete `src/App.css` — leftover from the Vite template; no longer
       imported anywhere.
-- [ ] Optional: delete `dist/` — contains output from a sandbox build; your own
+- [x] Optional: delete `dist/` — contains output from a sandbox build; your own
       `npm run build` regenerates it (it's git-ignored anyway).
 
 ## Git
 
-- [ ] **Delete stale git lock/temp files** left by the sandbox commit (Claude
+- [x] **Delete stale git lock/temp files** left by the sandbox commit (Claude
       can create but not delete files here). Until removed, git commands will
       fail with "…lock exists". From the mockup folder run:
 
@@ -26,17 +26,17 @@ settings). Check items off as done.
       git status   # should be clean apart from scripts/validate-export.mjs
       ```
 
-- [ ] Optional: create the GitHub repo and push (`git remote add origin … &&
+- [x] Optional: create the GitHub repo and push (`git remote add origin … &&
       git push -u origin main`). Initial commit `a5bd33c` is already made with
       your name/email as author.
 
 ## Phase 2 (catalog) — apply before testing save/load
 
-- [ ] **Apply migration `supabase/migrations/0005_spa_hardening.sql`** in the
+- [x] **Apply migration `supabase/migrations/0005_spa_hardening.sql`** in the
       Supabase SQL editor (adds server-side text sanitization + size caps —
       required now that the browser talks to the DB directly). The access
       policies from `setup_db_auth.py` are already correct and unchanged.
-- [ ] **Confirm your user has the admin role** (needed for the Admin page):
+- [x] **Confirm your user has the admin role** (needed for the Admin page):
 
       ```sql
       insert into public.user_roles (user_id, role)
@@ -47,6 +47,16 @@ settings). Check items off as done.
       
       (Find your UUID: Supabase → Authentication → Users. Skip if already
       granted for the Streamlit app.)
+
+## ITIL category split (before next catalog save)
+
+- [x] **Apply migration `supabase/migrations/0006_itil_category.sql`** in the
+      Supabase SQL editor (adds the `itil_category` column + updates the
+      sanitize trigger). Existing rows keep it NULL; loaders derive it.
+- [ ] **Review the draft CATEGORY_TREE mapping** in `src/data/options.ts` —
+      the grouping of common categories under ITIL practices is my draft and
+      needs your curation (Capacity Management is currently empty; the two
+      security options sit under the new Information Security Management).
 
 ## Streamlit decommission (decided 2026-07-05; execute when the new app deploys)
 
