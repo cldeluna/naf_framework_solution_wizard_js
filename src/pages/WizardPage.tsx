@@ -3,6 +3,7 @@ import { useWizard } from "../state/store";
 import { completionState } from "../lib/completion";
 import { missingRequired } from "../lib/fieldRegistry";
 import { renderReport } from "../lib/report";
+import { renderMarkdown } from "../lib/markdown";
 import { buildGanttSvg, ganttPngBlob } from "../lib/gantt";
 import { buildZip, type ZipEntry } from "../lib/zip";
 import PuzzleBoard from "../components/PuzzleBoard";
@@ -14,11 +15,11 @@ function FieldViewToggle() {
   const view = useWizard((s) => s.fieldView);
   const setFieldView = useWizard((s) => s.setFieldView);
   return (
-    <span className="badge" title="'Required only' hides optional fields in every section.">
+    <span className="badge" title="Applies to every section form.">
       <button className={view === "required" ? "seg on" : "seg"}
-              onClick={() => setFieldView("required")}>Required only</button>
+              onClick={() => setFieldView("required")}>🔎 Compact — Show Required Only Fields</button>
       <button className={view === "all" ? "seg on" : "seg"}
-              onClick={() => setFieldView("all")}>All fields</button>
+              onClick={() => setFieldView("all")}>🗂️ Detailed — Show All Fields</button>
     </span>
   );
 }
@@ -144,7 +145,9 @@ export default function WizardPage() {
           {ganttSvg && (
             <div className="gantt-wrap" dangerouslySetInnerHTML={{ __html: ganttSvg }} />
           )}
-          <pre className="report-preview">{reportMd}</pre>
+          {/* markdown-it renders with html:false — user content cannot inject markup */}
+          <div className="report-preview report-html"
+               dangerouslySetInnerHTML={{ __html: renderMarkdown(reportMd) }} />
         </details>
       )}
 

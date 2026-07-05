@@ -76,10 +76,16 @@ details summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; }
 .catalog-item { margin-bottom: 0.6rem; }
 
 .report-preview {
-  white-space: pre-wrap; font-size: 0.82rem; line-height: 1.45;
+  font-size: 0.85rem; line-height: 1.5;
   background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-  padding: 0.9rem; max-height: 420px; overflow-y: auto;
+  padding: 0.9rem 1.1rem; max-height: 480px; overflow-y: auto;
 }
+.report-html h1 { font-size: 1.3rem; border-bottom: 2px solid var(--naf-yellow); padding-bottom: 0.2rem; }
+.report-html h2 { font-size: 1.05rem; margin: 1rem 0 0.3rem; color: var(--naf-yellow); }
+.report-html h3 { font-size: 0.95rem; border: none; }
+.report-html img { max-width: 120px; }
+.report-html hr { border: none; border-top: 1px solid var(--border); }
+.report-html a { color: #7fbfff; }
 .gantt-wrap svg { width: 100%; height: auto; border-radius: 8px; margin: 0.5rem 0; }
 
 .mine-tag {
@@ -248,3 +254,10 @@ input[type="date"] { color-scheme: dark; }
 .seg:first-child { border-radius: 6px 0 0 6px; }
 .seg + .seg { border-left: none; border-radius: 0 6px 6px 0; }
 .seg.on { color: var(--text); border-color: var(--naf-yellow); background: rgba(255, 254, 3, 0.08); }
+
+.view-badge {
+  font-size: 0.75rem; font-weight: 600;
+  padding: 2px 12px; border-radius: 12px; border: 1px solid;
+}
+.view-badge.compact { color: #4caf50; border-color: #4caf50; }
+.view-badge.detail { color: #2196f3; border-color: #2196f3; }

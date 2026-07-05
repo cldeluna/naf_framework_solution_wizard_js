@@ -5,14 +5,27 @@
 import type { ReactNode } from "react";
 import { useWizard } from "../state/store";
 
+/** True when the global field view is Compact ("Required only"). */
+export function useCompact(): boolean {
+  return useWizard((s) => s.fieldView) === "required";
+}
+
 /**
- * Field wrapper. In the global "Required only" view (SPEC §2.4), optional
- * fields are hidden — only required/recommended fields render.
+ * Renders children only in the Detailed view — for headings/blocks whose
+ * fields are all optional (they'd hide themselves, leaving an orphan heading).
+ */
+export function DetailOnly({ children }: { children: ReactNode }) {
+  return useCompact() ? null : <>{children}</>;
+}
+
+/**
+ * Field wrapper. In the global Compact ("Required only") view (SPEC §2.4),
+ * optional fields are hidden — only required/recommended fields render.
  */
 export function Field({ label, required, recommended, children, hint }: {
   label: string; required?: boolean; recommended?: boolean; hint?: string; children: ReactNode;
 }) {
-  const compact = useWizard((s) => s.fieldView) === "required";
+  const compact = useCompact();
   if (compact && !required && !recommended) return null;
   return (
     <label className="field">

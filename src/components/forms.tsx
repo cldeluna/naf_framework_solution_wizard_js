@@ -7,7 +7,7 @@
 import { useEffect } from "react";
 import { useWizard } from "../state/store";
 import * as OPT from "../data/options";
-import { Field, TextInput, TextArea, CheckboxGrid, RadioWithOther, Select } from "./fields";
+import { Field, DetailOnly, TextInput, TextArea, CheckboxGrid, RadioWithOther, Select } from "./fields";
 import { scheduleItems, approxDuration, iso } from "../lib/schedule";
 import type { SectionKey } from "../data/sections";
 import type { JSX } from "react";
@@ -341,7 +341,7 @@ function StakeholdersForm() {
                         onChange={(v) => setField("my_role.developer", v)} />
       </Field>
 
-      <h3>Stakeholders</h3>
+      <DetailOnly><h3>Stakeholders</h3></DetailOnly>
       {Object.entries(OPT.STAKEHOLDER_CATALOG).map(([category, opts]) => (
         <Field key={category} label={category}>
           <CheckboxGrid options={opts}
@@ -473,7 +473,7 @@ function TimelineForm() {
                   onChange={(v) => setField("timeline.staffing_plan_md", v)} />
       </Field>
 
-      <h3>Timeline & milestones</h3>
+      <DetailOnly><h3>Timeline & milestones</h3></DetailOnly>
       <div className="two-col">
         <Field label="Holiday calendar" hint="Recorded for business-day math; region skipping lands with the holiday library.">
           <select value={tl.holiday_region || "None"}
@@ -520,10 +520,12 @@ function TimelineForm() {
       </Field>
 
       {tl.projected_completion && (
-        <p className="callout success">
-          📅 Expected delivery: <strong>{tl.projected_completion}</strong>
-          {" "}({tl.total_business_days} business days, {approxDuration(tl.total_business_days)})
-        </p>
+        <DetailOnly>
+          <p className="callout success">
+            📅 Expected delivery: <strong>{tl.projected_completion}</strong>
+            {" "}({tl.total_business_days} business days, {approxDuration(tl.total_business_days)})
+          </p>
+        </DetailOnly>
       )}
     </>
   );
