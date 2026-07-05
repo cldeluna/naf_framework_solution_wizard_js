@@ -36,36 +36,35 @@ export default function HomePage() {
         to your automation projects.
       </p>
 
-      <div className="home-grid">
-        <div>
-          <img src="images/naf_arch_framework_figure2.png" alt="NAF Framework architecture"
-               style={{ width: "100%", borderRadius: 8 }} />
-          <p className="field-hint">
-            Source:{" "}
-            <a href="https://github.com/Network-Automation-Forum/reference/blob/main/docs/Framework/Framework.md"
-               target="_blank" rel="noreferrer">
-              NAF reference framework
-            </a>
-          </p>
-        </div>
-        <div>
-          <h3>Solution Wizard</h3>
-          <p>
-            Define the <strong>WHY, WHO, HOW, and WHAT</strong> of your automation
-            project. The wizard guides structured thinking across every NAF
-            component — stakeholders, scope, data flows, and build/buy/support
-            decisions — so nothing critical is missed. Your selections generate a
-            shareable solution design document for your team, stakeholders, and
-            management.
-          </p>
-          <p className="field-hint">
-            Tip: If you can't answer a question technically, note that the function
-            is needed and use the Custom option to describe what you can.
-          </p>
-          <button className="cta" onClick={() => navigate("/wizard")}>
-            🚀 Start Building Your Solution
-          </button>
-        </div>
+      {/* Full-width framework hero */}
+      <figure className="hero-figure">
+        <img src="images/naf_arch_framework_figure2.png" alt="NAF Framework architecture" />
+        <figcaption className="field-hint">
+          Source:{" "}
+          <a href="https://github.com/Network-Automation-Forum/reference/blob/main/docs/Framework/Framework.md"
+             target="_blank" rel="noreferrer">
+            NAF reference framework
+          </a>
+        </figcaption>
+      </figure>
+
+      <div className="hero-pitch">
+        <h3>Solution Wizard</h3>
+        <p>
+          Define the <strong>WHY, WHO, HOW, and WHAT</strong> of your automation
+          project. The wizard guides structured thinking across every NAF
+          component — stakeholders, scope, data flows, and build/buy/support
+          decisions — so nothing critical is missed. Your selections generate a
+          shareable solution design document for your team, stakeholders, and
+          management.
+        </p>
+        <p className="field-hint">
+          Tip: If you can't answer a question technically, note that the function
+          is needed and use the Custom option to describe what you can.
+        </p>
+        <button className="cta" onClick={() => navigate("/wizard")}>
+          🚀 Start Building Your Solution
+        </button>
       </div>
 
       <details>
@@ -112,19 +111,23 @@ export default function HomePage() {
       </details>
 
       <footer className="sponsors">
-        <a href="https://eianow.com" target="_blank" rel="noreferrer">
-          <img src="images/EIA Logo FINAL small_Round.png" alt="EIA" width={48} />
-        </a>
-        <span>
-          Sponsored by <a href="https://eianow.com" target="_blank" rel="noreferrer">EIA</a>{" "}
-          · <a href="https://www.linkedin.com/company/eianow/" target="_blank" rel="noreferrer">[in] EIA on LinkedIn</a>
+        <span className="sponsor-side">
+          <a href="https://networkautomation.forum/" target="_blank" rel="noreferrer">
+            <img src="images/naf_icon.png" alt="NAF" width={48} />
+          </a>
+          <span>
+            <a href="https://networkautomation.forum/" target="_blank" rel="noreferrer">🏠 NAF Home</a>{" "}
+            · <a href="https://www.linkedin.com/company/network-automation-forum/" target="_blank" rel="noreferrer">[in] NAF on LinkedIn</a>
+          </span>
         </span>
-        <a href="https://networkautomation.forum/" target="_blank" rel="noreferrer">
-          <img src="images/naf_icon.png" alt="NAF" width={48} />
-        </a>
-        <span>
-          <a href="https://networkautomation.forum/" target="_blank" rel="noreferrer">🏠 NAF Home</a>{" "}
-          · <a href="https://www.linkedin.com/company/network-automation-forum/" target="_blank" rel="noreferrer">[in] NAF on LinkedIn</a>
+        <span className="sponsor-side">
+          <span>
+            Sponsored by <a href="https://eianow.com" target="_blank" rel="noreferrer">EIA</a>{" "}
+            · <a href="https://www.linkedin.com/company/eianow/" target="_blank" rel="noreferrer">[in] EIA on LinkedIn</a>
+          </span>
+          <a href="https://eianow.com" target="_blank" rel="noreferrer">
+            <img src="images/EIA Logo FINAL small_Round.png" alt="EIA" width={48} />
+          </a>
         </span>
       </footer>
     </div>

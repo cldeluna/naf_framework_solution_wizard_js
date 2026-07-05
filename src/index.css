@@ -41,6 +41,18 @@ body {
 
 .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
 @media (max-width: 700px) { .home-grid { grid-template-columns: 1fr; } }
+
+/* Full-width framework hero */
+.hero-figure { margin: 0.75rem 0 0.25rem; }
+.hero-figure img {
+  width: 100%; border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff; /* the figure has a light background — frame it cleanly */
+  display: block;
+}
+.hero-figure figcaption { text-align: right; margin-top: 0.25rem; }
+.hero-pitch { max-width: 640px; margin: 0.75rem auto 1rem; text-align: center; }
+.hero-pitch h3 { border: none; }
 .cta {
   background: var(--naf-yellow); color: #111; font-weight: 700;
   border: none; border-radius: 8px; padding: 0.7rem 1.2rem;
@@ -60,11 +72,13 @@ details summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; }
 .fn-tags { font-size: 0.75rem; color: var(--naf-yellow); font-weight: 500; margin-left: 0.4rem; }
 
 .sponsors {
-  display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.9rem; flex-wrap: wrap;
   margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);
   font-size: 0.85rem; color: var(--text-dim);
 }
 .sponsors img { border-radius: 50%; }
+.sponsor-side { display: inline-flex; align-items: center; gap: 0.6rem; }
 
 .modal {
   margin: auto; background: var(--panel-bg);
