@@ -161,3 +161,7 @@ Never sync or commit `node_modules` (it's git-ignored; if this folder lives in D
 ## Deployment
 
 Cloudflare Pages: build command `npm run build`, output directory `dist`, set `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` as build environment variables. See SPEC §3.6 for the hosted vs self-hosted model.
+
+## License
+
+[MIT](./LICENSE). The NAF and EIA logos under `images/` are the trademarks of their respective organizations and aren't covered by this license.
