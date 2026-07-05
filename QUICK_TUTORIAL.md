@@ -4,6 +4,15 @@ The Solution Wizard helps you describe a network automation project using the [N
 
 **Site:** https://naf-solution-wizard.ing/
 
+## Two usage modes
+
+| | No account | Signed in with Google |
+|---|---|---|
+| Fill in, download, and reload the wizard | ✅ | ✅ |
+| Browse the shared catalog / save & edit your own entries | ❌ | ✅ |
+
+Sign-in is only for the shared catalog — everything else works with no account at all.
+
 ## 5-minute walkthrough
 
 1. **Open the site.** You don't need an account to use the wizard — everything works signed out.
