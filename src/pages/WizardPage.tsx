@@ -147,7 +147,14 @@ export default function WizardPage() {
               {FRAME_SECTIONS.map(sectionBtn)}
             </Group>
             <Group title="⚙️ Solution — NAF Framework Components">
-              {INNER_SECTIONS.map(sectionBtn)}
+              {/* Rows mirror the NAF architecture figure on the Home page */}
+              <div className="naf-rows">
+                {[["presentation"], ["observability", "orchestration", "intent"], ["collector", "executor"]].map((row, i) => (
+                  <div key={i} className="naf-row">
+                    {row.map((k) => sectionBtn(INNER_SECTIONS.find((s) => s.key === k)!))}
+                  </div>
+                ))}
+              </div>
             </Group>
           </div>
         );

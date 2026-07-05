@@ -151,6 +151,10 @@ details summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; }
   color: var(--text-dim); border: none; padding: 0;
 }
 .btn-group-body { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+
+/* NAF component buttons laid out like the framework figure */
+.naf-rows { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
+.naf-row { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
 .danger-group { border-color: rgba(255, 82, 60, 0.45); flex: 0 1 auto; }
 .danger-group .btn-group-title { color: #ff7043; }
 
