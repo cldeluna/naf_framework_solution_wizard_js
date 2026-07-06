@@ -132,8 +132,7 @@ export default function SolutionsPage() {
       <div className="page">
         <h2>Community Design Solutions</h2>
         <p className="callout">
-          🔒 <strong>Sign in to load designs into the wizard and see full details.</strong>{" "}
-          <button className="link-btn" onClick={() => navigate("/")}>Sign in on the Home page →</button>
+          🔒 Sign in with Google (top right) to load designs into the wizard and see full details.
         </p>
 
         <div className="catalog-toolbar">
