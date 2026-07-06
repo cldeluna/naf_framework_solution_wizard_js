@@ -82,15 +82,15 @@ export default function SolutionsPage() {
 
   if (!auth.configured) {
     return (
-      <div className="page"><h2>Solutions Catalog</h2>
+      <div className="page"><h2>Community Design Solutions</h2>
         <p className="callout warn">JSON-only mode — no database configured. Use Download/Load JSON in the wizard to share designs.</p>
       </div>
     );
   }
-  if (!auth.ready) return <div className="page"><h2>Solutions Catalog</h2><p>…</p></div>;
+  if (!auth.ready) return <div className="page"><h2>Community Design Solutions</h2><p>…</p></div>;
   if (!auth.user) {
     return (
-      <div className="page"><h2>Solutions Catalog</h2>
+      <div className="page"><h2>Community Design Solutions</h2>
         <p className="callout warn">🔒 Sign in (Home page) to browse the shared catalog.</p>
       </div>
     );
@@ -120,7 +120,7 @@ export default function SolutionsPage() {
 
   return (
     <div className="page">
-      <h2>Solutions Catalog {admin && <span className="admin-badge" title="Your account has the admin role: you see submitter contact on every record and can delete any record, not just your own.">🛡 admin</span>}</h2>
+      <h2>Community Design Solutions {admin && <span className="admin-badge" title="Your account has the admin role: you see submitter contact on every record and can delete any record, not just your own.">🛡 admin</span>}</h2>
       <p className="tagline">
         Community problem statements and their solution designs. <strong>Load</strong> pulls
         a design straight into the wizard — saving forks it under your account

@@ -59,6 +59,7 @@ export default function HomePage() {
         <button className="cta" onClick={() => navigate("/wizard")}>
           🚀 Start Designing Your Solution
         </button>
+        <p style={{ margin: "0.5rem 0 0" }}>or <button className="cta-secondary" onClick={() => navigate("/solutions")}>📚 View Community Solutions</button></p>
       </div>
 
       <details>

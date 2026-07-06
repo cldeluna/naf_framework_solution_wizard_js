@@ -9,7 +9,7 @@ import TermsPage from "./pages/TermsPage";
 const NAV: { to: Route; label: string }[] = [
   { to: "/", label: "🏠 Home" },
   { to: "/wizard", label: "🧩 Design Solution Wizard" },
-  { to: "/solutions", label: "📚 Solutions" },
+  { to: "/solutions", label: "📚 Community Solutions" },
   { to: "/admin", label: "🛠 Admin" },
   { to: "/terms", label: "📖 Terms" },
 ];
