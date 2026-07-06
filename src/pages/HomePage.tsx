@@ -63,7 +63,7 @@ export default function HomePage() {
           is needed and use the Custom option to describe what you can.
         </p>
         <button className="cta" onClick={() => navigate("/wizard")}>
-          🚀 Start Building Your Solution
+          🚀 Start Designing Your Solution
         </button>
       </div>
 

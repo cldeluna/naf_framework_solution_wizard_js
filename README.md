@@ -24,7 +24,7 @@ In short: **everything you need to work through the wizard on your own — filli
 
 ### Home page
 
-- Framework overview and a **🚀 Start Building Your Solution** button that opens the Wizard.
+- Framework overview and a **🚀 Start Designing Your Solution** button that opens the Wizard.
 - **Sign in with Google** here if you want catalog access. Signing in never clears a wizard you've already started — your draft is saved in the browser regardless of auth state.
 - **If you plan to save to the catalog, sign in early.** The "🗄 Save to catalog" button on the Wizard page is grayed out and not clickable until you're signed in — it does not prompt you to sign in when clicked. You can still fill in puzzle pieces while signed out; just come back to the Home page and sign in with Google before (or any time before) you're ready to save. Signing in mid-wizard is safe either way: the sign-in redirect reloads the page, but your entries were already autosaved to the browser's local storage and are restored automatically on load.
 - Expandable sections cover what the wizard collects and how saving/loading works.

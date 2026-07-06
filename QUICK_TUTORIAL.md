@@ -17,7 +17,7 @@ Sign-in is only for the shared catalog — everything else works with no account
 
 1. **Open the site.** You don't need an account to use the wizard — everything works signed out.
 2. **(Optional) Sign in with Google** on the Home page if you want to save your design to the shared community catalog or load one later. Skip this if you just want a file to keep locally.
-3. **Click "🚀 Start Building Your Solution"** to open the Wizard.
+3. **Click "🚀 Start Designing Your Solution"** to open the Wizard.
 4. **Click any puzzle piece** to fill in that section:
    - The 4 **border pieces** are project context: Problem Statement & Use Case (WHY), Stakeholders & My Role (WHO), Staffing & Timeline (WHEN), Dependencies (WHAT).
    - The 6 **inner pieces** are the NAF components: Presentation, Intent, Observability, Orchestration, Collector, Executor.
