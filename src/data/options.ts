@@ -217,7 +217,7 @@ export const CATEGORY_TREE: Record<string, string[]> = {
   ],
 
   "Service Validation and Testing": [
-  "Digital Twin Testing",
+  "Network Lab and Digital Twin/Cousin Testing",
   "Lab Validation",
   "Pre-Change Testing",
   "Post-Change Testing",
