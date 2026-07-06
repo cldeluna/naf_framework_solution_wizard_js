@@ -4,6 +4,25 @@ Manual cleanup/config items for Claudia — mostly things Claude cannot do from
 its side (no file deletion in this folder; no access to Supabase/Dropbox
 settings). Check items off as done.
 
+## Where to review & update option catalogs and content
+
+All curated lists live in a handful of files. Edit → `npx tsc -b` (or just let
+the dev server reload) → commit → push (auto-deploys). None of these require a
+schema or DB change unless noted.
+
+| What | Where | Notes |
+|---|---|---|
+| **ITIL practices** (top-level categories) | `src/data/options.ts` → `CATEGORY_TREE` keys + `CATEGORY_METADATA` | Adding/renaming a practice: also update `ITIL_CATEGORY_OPTIONS` in `contract/wizard_models.py` (soft-validator), add a `PRACTICE_DEFINITIONS` entry in `src/data/terms.ts`, a shade in `ITIL_COLORS` (greys only — color is reserved for framework blocks), and a `LEGACY_ITIL_ALIASES` entry if renaming |
+| **Common categories** (subcategories) | `src/data/options.ts` → `CATEGORY_TREE` leaf arrays | If removing/renaming a leaf, add it to `LEGACY_LEAF_PARENT` so old records still derive their practice. Pair each new leaf with an example (next row) |
+| **Category examples & definitions** (Terms page tables) | `src/data/terms.ts` → `CATEGORY_EXAMPLES` (one line per leaf) and `CATEGORY_DEFINITIONS` (optional longer text) | ⚠️ The current examples + the two newest practice definitions are Claude drafts — review pass pending |
+| **Tool catalog** (Terms page + future FR-19 typeahead) | `src/data/tools.json` | Converted from the old repo's `tools.yml` (which has YAML syntax errors — treat `tools.json` as the source now). Each entry: `name`, `url`, `notes`, `framework_functions` (must use the six block names exactly), `source`. Becomes a DB table when FR-19 lands (SPEC §5b) |
+| **Section form options** (checkbox lists per puzzle piece) | `src/data/options.ts` → `PRESENTATION_*`, `INTENT_*`, `OBSERVABILITY_*`, `ORCHESTRATION_CHOICES`, `COLLECTOR_*`, `EXECUTOR_METHODS`, `MY_ROLE_*`, `STAKEHOLDER_CATALOG`, `DEPENDENCY_DEFS`, `STANDARD_RISK_REASONS` | Keep option strings stable — they're stored verbatim in saved payloads; renames orphan old data (old values still load, shown as custom) |
+| **Deployment strategies** | `src/data/options.ts` → `DEPLOYMENT_STRATEGIES` + matching definition in `src/data/terms.ts` → `DEPLOYMENT_DEFINITIONS` | Keep the two in sync (a tsx one-liner check exists in git history; mismatch shows as a strategy without a Terms definition) |
+| **Timeline defaults** | `src/data/options.ts` → `DEFAULT_MILESTONES`, `HOLIDAY_REGIONS`, `BUILD_BUY_OPTIONS` | Changing default milestone *names*: also update `DEFAULT_MILESTONE_NAMES` (used by the piece-completion check) |
+| **Framework block colors** | `src/data/sections.ts` → `INNER_SECTIONS` | Single source: puzzle, Gantt, tool chips all read from here. Reserved palette — don't reuse these hues elsewhere |
+| **Required-field tiers** | `src/lib/fieldRegistry.ts` (app) + `contract/field_registry.py` (contract) | Keep both in sync; changes affect save-blocking, compact view, and puzzle completion |
+| **Payload shape** (add/remove fields) | `contract/wizard_models.py` → follow `contract/README.md` workflow (regen schema → copy → `npm run gen:types`) + DB migration if a column is involved | The heavyweight path — everything else above is data-only |
+
 ## File cleanup
 
 - [x] Delete `scripts/validate-export.mjs` — stale; replaced by
