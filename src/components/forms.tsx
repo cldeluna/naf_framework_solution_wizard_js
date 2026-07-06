@@ -229,11 +229,13 @@ function ProblemStatementForm() {
         <TextInput value={ini.author} maxLength={100}
                    onChange={(v) => setField("initiative.author", v)} />
       </Field>
-      <Field label="Automation initiative title" required>
+      <Field label="Title" required
+             hint="Displayed as the card heading in Community Design Solutions when this design is shared.">
         <TextInput value={ini.title} maxLength={200}
                    onChange={(v) => setField("initiative.title", v)} />
       </Field>
-      <Field label="Short description / scope" required>
+      <Field label="Abstract" required
+             hint="A short summary of scope and intent — shown beneath the title in Community Design Solutions.">
         <TextArea value={ini.description} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.description", v)} />
       </Field>
