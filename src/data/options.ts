@@ -269,6 +269,24 @@ export const CATEGORY_METADATA: Record<keyof typeof CATEGORY_TREE, CategoryMetad
 export const ITIL_CATEGORIES = Object.keys(CATEGORY_TREE);
 
 /**
+ * Stable accent shade per ITIL practice — a NEUTRAL grey/slate ramp only.
+ * Color is reserved for the NAF framework blocks (INNER_SECTIONS); even muted
+ * hues read as "desaturated framework colors" because incomplete puzzle
+ * pieces render desaturated. ITIL practices therefore use greys, light→dark
+ * in tree order, and rely on their labels for identification.
+ */
+export const ITIL_COLORS: Record<string, string> = {
+  "Service Configuration Management": "#D3DAE3",
+  "Change Enablement": "#BCC5D1",
+  "Incident Management": "#A5B0BF",
+  "Problem Management": "#8E9BAD",
+  "Monitoring and Event Management": "#77869B",
+  "Capacity and Performance Management": "#647389",
+  "Information Security Management": "#526077",
+  "Service Validation and Testing": "#6E7B8E",
+};
+
+/**
  * Legacy ITIL parent names (pre-2026-07-05 exports) -> current practice names.
  * When a legacy export stored one of these in `category`, it is promoted to
  * itil_category (and the common category left for the user to pick).

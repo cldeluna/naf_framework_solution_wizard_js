@@ -8,24 +8,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useWizard } from "../state/store";
 import { navigate } from "../lib/router";
-import { ITIL_CATEGORIES, itilParentOf } from "../data/options";
+import { ITIL_CATEGORIES, ITIL_COLORS, itilParentOf } from "../data/options";
 import {
   listCatalog, loadWizardFromSolution, deleteSolution,
   deleteInitiativeWithSolutions, isCurrentUserAdmin, visibleContact,
   type InitiativeRow, type SolutionRow,
 } from "../lib/catalog";
 
-/** Stable accent color per ITIL practice (echoes the puzzle palette). */
-const ITIL_COLORS: Record<string, string> = {
-  "Service Configuration Management": "#E8B817",
-  "Change Enablement": "#FF6B35",
-  "Incident Management": "#E91E63",
-  "Problem Management": "#7B52E0",
-  "Monitoring and Event Management": "#2ECC40",
-  "Capacity and Performance Management": "#00BCD4",
-  "Information Security Management": "#A8B8C8",
-  "Service Validation and Testing": "#B0A090",
-};
 const accentFor = (itil: string | null | undefined) => ITIL_COLORS[itil ?? ""] ?? "#4a5560";
 
 /** Effective ITIL practice for a row — stored value, or derived from the
