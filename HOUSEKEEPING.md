@@ -58,6 +58,15 @@ settings). Check items off as done.
       needs your curation (Capacity Management is currently empty; the two
       security options sit under the new Information Security Management).
 
+## Security review follow-ups (see SECURITY_REVIEW.md)
+
+- [ ] **Apply migration `supabase/migrations/0007_privacy_hardening.sql`**
+      (contact_ok enforced server-side via masked views; solutions INSERT
+      ownership check). App reads now expect the views — apply before the
+      next deploy/pull of the catalog page.
+- [ ] Push/redeploy so `public/_headers` (CSP + security headers) ships.
+- [ ] Run the two verification checks in SECURITY_REVIEW.md §Action items.
+
 ## Streamlit decommission (decided 2026-07-05; execute when the new app deploys)
 
 - [ ] Replace the Streamlit Cloud app with a short retirement notice + link to

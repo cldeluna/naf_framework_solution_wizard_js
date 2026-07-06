@@ -131,7 +131,7 @@ export default function SolutionsPage() {
 
   return (
     <div className="page">
-      <h2>Solutions Catalog</h2>
+      <h2>Solutions Catalog {admin && <span className="admin-badge" title="Your account has the admin role: you see submitter contact on every record and can delete any record, not just your own.">🛡 admin</span>}</h2>
       <p className="tagline">
         Community problem statements and their solution designs. <strong>Load</strong> pulls
         a design straight into the wizard — saving forks it under your account
@@ -194,7 +194,9 @@ export default function SolutionsPage() {
                     <span className="sol-actions">
                       <button onClick={() => load(s.id)}>📥 Load</button>
                       {(admin || s.owner_id === auth.user!.id) && (
-                        <button className="row-del" title="Delete solution" onClick={() => removeSolution(s)}>🗑</button>
+                        <button className="row-del"
+                                title={s.owner_id === auth.user!.id ? "Delete your solution" : "Delete (admin power — not your record)"}
+                                onClick={() => removeSolution(s)}>🗑</button>
                       )}
                     </span>
                   </div>
@@ -202,8 +204,10 @@ export default function SolutionsPage() {
               </div>
               {(admin || mine) && (
                 <footer className="card-footer">
-                  <button className="row-del" onClick={() => removeInitiative(ini, sols.length)}>
-                    🗑 Delete initiative + solutions
+                  <button className="row-del"
+                          title={mine ? "Delete your initiative" : "Delete (admin power — not your record)"}
+                          onClick={() => removeInitiative(ini, sols.length)}>
+                    🗑 Delete initiative + solutions{!mine && admin ? " (admin)" : ""}
                   </button>
                 </footer>
               )}

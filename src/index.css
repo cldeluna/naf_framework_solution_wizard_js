@@ -157,6 +157,12 @@ details summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; }
 .report-html a { color: #7fbfff; }
 .gantt-wrap svg { width: 100%; height: auto; border-radius: 8px; margin: 0.5rem 0; }
 
+.admin-badge {
+  font-size: 0.65rem; font-weight: 700; vertical-align: middle;
+  color: #ffb74d; border: 1px solid #ffb74d; border-radius: 10px;
+  padding: 2px 8px; margin-left: 8px;
+}
+
 .mine-tag {
   font-size: 0.7rem; font-weight: 700; color: #111;
   background: var(--naf-yellow); border-radius: 8px;

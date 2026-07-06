@@ -184,12 +184,15 @@ function db() {
   return supabase;
 }
 
+// READS go through the masked catalog views (migration 0007): submitter
+// contact is nulled server-side unless the submitter opted in (contact_ok)
+// or the reader is an admin. WRITES stay on the base tables (RLS-guarded).
 export async function listCatalog(): Promise<{ initiatives: InitiativeRow[]; solutions: SolutionRow[] }> {
   const [ini, sol] = await Promise.all([
-    db().from("initiatives")
+    db().from("catalog_initiatives")
       .select("id, owner_id, author, title, description, itil_category, category, problem_statement, use_case, submitter_name, submitter_email, contact_ok, created_at, updated_at")
       .order("created_at", { ascending: false }).limit(200),
-    db().from("solutions")
+    db().from("catalog_solutions")
       .select("id, initiative_id, owner_id, name, status, deployment_strategy, version, submitter_name, submitter_email, contact_ok, created_at")
       .order("created_at", { ascending: false }).limit(500),
   ]);
@@ -201,9 +204,9 @@ export async function listCatalog(): Promise<{ initiatives: InitiativeRow[]; sol
 export async function loadWizardFromSolution(solutionId: string): Promise<{
   payload: Record<string, unknown>; initiativeId: string; ownerId: string | null;
 }> {
-  const sol = await db().from("solutions").select("*").eq("id", solutionId).limit(1).single();
+  const sol = await db().from("catalog_solutions").select("*").eq("id", solutionId).limit(1).single();
   if (sol.error) throw sol.error;
-  const ini = await db().from("initiatives").select("*").eq("id", sol.data.initiative_id).limit(1).single();
+  const ini = await db().from("catalog_initiatives").select("*").eq("id", sol.data.initiative_id).limit(1).single();
   if (ini.error) throw ini.error;
   return {
     payload: toWizardPayload(ini.data, sol.data),
@@ -213,7 +216,9 @@ export async function loadWizardFromSolution(solutionId: string): Promise<{
 }
 
 async function findByHash(table: "initiatives" | "solutions", contentHash: string, ownerId: string) {
-  const res = await db().from(table).select("*")
+  // base table (dedup during save); select only id — contact columns are not
+  // readable on base tables after migration 0007
+  const res = await db().from(table).select("id")
     .eq("content_hash", contentHash).eq("owner_id", ownerId).limit(1).maybeSingle();
   if (res.error) throw res.error;
   return res.data;
