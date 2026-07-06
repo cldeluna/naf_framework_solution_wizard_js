@@ -1,4 +1,4 @@
-# NAF Framework Solution Wizard — Rebuild Specification
+# NAF Framework Design Solution Wizard — Rebuild Specification
 
 | | |
 |---|---|
@@ -12,7 +12,7 @@
 
 ## 1. Background & Motivation
 
-The Solution Wizard helps the network automation community describe a proposed automation solution using the NAF Network Automation Framework. Users click puzzle pieces — a four-piece **frame** (project context: problem statement/use case, stakeholders, staffing & timeline, dependencies) around six **inner pieces** (the NAF components: Presentation, Intent, Observability, Orchestration, Collector, Executor) — filling in a section form per piece. Output is a shareable solution design document (JSON + Markdown + Gantt) and, optionally, a record in a shared Supabase catalog.
+The Design Solution Wizard helps the network automation community describe a proposed automation solution using the NAF Network Automation Framework. Users click puzzle pieces — a four-piece **frame** (project context: problem statement/use case, stakeholders, staffing & timeline, dependencies) around six **inner pieces** (the NAF components: Presentation, Intent, Observability, Orchestration, Collector, Executor) — filling in a section form per piece. Output is a shareable solution design document (JSON + Markdown + Gantt) and, optionally, a record in a shared Supabase catalog.
 
 ### Why rebuild
 
@@ -37,7 +37,7 @@ Documented from source. This is the feature contract for the rebuild — anythin
 | Page | File | Function |
 |---|---|---|
 | Landing | `NAF_Framework_Solution_Wizard.py` | Branding, framework intro, **auth gate** (sign in before starting so the OAuth redirect doesn't wipe a half-filled wizard), CTA → wizard, disclaimer, EIA sponsor footer |
-| Solution Wizard | `pages/20_NAF_Solution_Wizard.py` (~4,500 lines) | The puzzle + section dialogs + preview + export/save (detailed below) |
+| Design Solution Wizard | `pages/20_NAF_Solution_Wizard.py` (~4,500 lines) | The puzzle + section dialogs + preview + export/save (detailed below) |
 | Public Solutions | `pages/70_Public_Solutions.py` | Read-only shared catalog; signed-in users browse all initiatives/solutions grouped by initiative; **Load** forks any design into the wizard under their own user id; submitter contact shown only if `contact_ok` |
 | Admin | `pages/80_Admin.py` | Admin-gated: browse catalog with contact always visible, delete solution or whole initiative (cascade), manage user roles (`viewer`/`editor`/`admin`) by UID |
 | Terms & Definitions | `pages/90_Terms_and_Definitions.py` | Reference glossary rendered from `tools.yml`, `use_case_categories.yml`, `deployment_strategies.yml` |

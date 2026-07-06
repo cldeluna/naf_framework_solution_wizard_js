@@ -1,6 +1,6 @@
-# NAF Solution Wizard — Quick Tutorial
+# NAF Design Solution Wizard — Quick Tutorial
 
-The Solution Wizard helps you describe a network automation project using the [NAF Framework](https://reference.networkautomation.forum/Framework/Framework/). You fill in a "puzzle" of 10 pieces, then export or share the result as a solution design document.
+The Design Solution Wizard helps you describe a network automation project using the [NAF Framework](https://reference.networkautomation.forum/Framework/Framework/). You fill in a "puzzle" of 10 pieces, then export or share the result as a solution design document.
 
 **Site:** https://naf-solution-wizard.ing/
 

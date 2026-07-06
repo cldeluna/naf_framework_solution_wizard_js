@@ -1,4 +1,4 @@
-/** Solution Wizard page — puzzle board, section forms, artifacts, import/export. */
+/** Design Solution Wizard page — puzzle board, section forms, artifacts, import/export. */
 import { useWizard } from "../state/store";
 import { completionState } from "../lib/completion";
 import { missingRequired } from "../lib/fieldRegistry";

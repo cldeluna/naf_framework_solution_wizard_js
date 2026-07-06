@@ -1,7 +1,7 @@
 # Supabase Setup — Step by Step (First-Time Guide)
 
 This guide walks you through creating a Supabase project from scratch and
-connecting it to the NAF Solution Wizard so you can **Save to Database** and
+connecting it to the NAF Design Solution Wizard so you can **Save to Database** and
 **Load Saved Solution (Database)**.
 
 You do **not** need to know SQL or Postgres. Every step below is copy‑paste or
@@ -291,7 +291,7 @@ never be committed). Pick **one** of the two options below.
    uv run streamlit run NAF_Framework_Solution_Wizard.py
    ```
 
-2. Open the **NAF Solution Wizard** page.
+2. Open the **NAF Design Solution Wizard** page.
 3. Fill in at least the required fields so a save is allowed:
    - **Title**, **Description**, and **Category** (these three are required).
 4. Scroll to **Save Solution Artifacts** and click **💾 Save to Database**.

@@ -9,7 +9,7 @@ export default function HomePage() {
   const auth = useAuth();
   return (
     <div className="page">
-      <h2>Network Automation Forum (NAF) Framework Solution Wizard</h2>
+      <h2>Network Automation Forum (NAF) Framework Design Solution Wizard</h2>
 
       {auth.configured && auth.ready && (
         auth.user ? (
@@ -49,7 +49,7 @@ export default function HomePage() {
       </figure>
 
       <div className="hero-pitch">
-        <h3>Solution Wizard</h3>
+        <h3>Design Solution Wizard</h3>
         <p>
           Define the <strong>WHY, WHO, HOW, and WHAT</strong> of your automation
           project. The wizard guides structured thinking across every NAF

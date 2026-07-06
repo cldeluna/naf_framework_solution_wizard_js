@@ -1,6 +1,6 @@
-# NAF Solution Wizard — React Rebuild
+# NAF Design Solution Wizard — React Rebuild
 
-Rebuild of the [NAF Framework Solution Wizard](https://naf-framework-solution-wizard.streamlit.app/) as a Vite + React + TypeScript SPA backed by Supabase, per [SPEC.md](./SPEC.md).
+Rebuild of the [NAF Framework Design Solution Wizard](https://naf-framework-solution-wizard.streamlit.app/) as a Vite + React + TypeScript SPA backed by Supabase, per [SPEC.md](./SPEC.md).
 
 ## How to Use the Wizard
 

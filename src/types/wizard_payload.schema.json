@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/eianow-automation/naf_framework_solution_wizard/schemas/wizard_payload.schema.json",
   "title": "WizardPayload",
-  "description": "The complete NAF Solution Wizard payload.\n\nEvery section is optional with a default so partial / legacy exports load\ncleanly. Use :meth:`validate_for_save` to enforce the fields that are\ngenuinely required before persisting.",
+  "description": "The complete NAF Design Solution Wizard payload.\n\nEvery section is optional with a default so partial / legacy exports load\ncleanly. Use :meth:`validate_for_save` to enforce the fields that are\ngenuinely required before persisting.",
   "$defs": {
     "Collector": {
       "properties": {

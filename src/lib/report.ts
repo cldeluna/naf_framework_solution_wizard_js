@@ -160,6 +160,6 @@ export function renderReport(p: WizardPayload, opts?: { ganttImagePath?: string 
 
   md += section("Staffing Plan", has(tl.staffing_plan_md) ? tl.staffing_plan_md : "No detailed staffing plan provided");
 
-  md += "---\n\nNAF NAF Solution Wizard provided by EIA https://eianow.com\n";
+  md += "---\n\nNAF Design Solution Wizard provided by EIA https://eianow.com\n";
   return md;
 }
