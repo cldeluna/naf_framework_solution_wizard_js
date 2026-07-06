@@ -61,6 +61,8 @@ body {
 .cta:hover { filter: brightness(0.9); }
 .cta-secondary { background: #2563eb; color: #fff; font-weight: 600; border: none; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer; }
 .cta-secondary:hover { filter: brightness(1.15); }
+.link-btn { background: none; border: none; padding: 0; color: #7fbfff; cursor: pointer; font-size: inherit; text-decoration: underline; }
+.link-btn:hover { opacity: 0.8; }
 
 details {
   border: 1px solid var(--border); border-radius: 8px;

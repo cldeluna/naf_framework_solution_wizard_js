@@ -178,6 +178,24 @@ export function toWizardPayload(initiative: Record<string, unknown>, solution: R
   return payload;
 }
 
+// ── Teaser row types (anon-safe columns — no payload, no contact) ──
+export interface TeaserInitiativeRow {
+  id: string;
+  title: string;
+  description: string | null;
+  itil_category: string | null;
+  category: string | null;
+  created_at: string;
+}
+
+export interface TeaserSolutionRow {
+  id: string;
+  initiative_id: string;
+  name: string | null;
+  deployment_strategy: string | null;
+  created_at: string;
+}
+
 // ── repository.py ports ─────────────────────────────────────────
 function db() {
   if (!supabase) throw new Error("Supabase is not configured (JSON-only mode).");
@@ -199,6 +217,22 @@ export async function listCatalog(): Promise<{ initiatives: InitiativeRow[]; sol
   if (ini.error) throw ini.error;
   if (sol.error) throw sol.error;
   return { initiatives: (ini.data ?? []) as InitiativeRow[], solutions: (sol.data ?? []) as SolutionRow[] };
+}
+
+/** Teaser catalog for anonymous users — reads from teaser_* views (migration 0008).
+ *  No auth token required; returns only the safe column subset. */
+export async function listTeaserCatalog(): Promise<{ initiatives: TeaserInitiativeRow[]; solutions: TeaserSolutionRow[] }> {
+  const [ini, sol] = await Promise.all([
+    db().from("teaser_initiatives")
+      .select("id, title, description, itil_category, category, created_at")
+      .order("created_at", { ascending: false }).limit(200),
+    db().from("teaser_solutions")
+      .select("id, initiative_id, name, deployment_strategy, created_at")
+      .order("created_at", { ascending: false }).limit(500),
+  ]);
+  if (ini.error) throw ini.error;
+  if (sol.error) throw sol.error;
+  return { initiatives: (ini.data ?? []) as TeaserInitiativeRow[], solutions: (sol.data ?? []) as TeaserSolutionRow[] };
 }
 
 export async function loadWizardFromSolution(solutionId: string): Promise<{

@@ -10,9 +10,10 @@ import { useWizard } from "../state/store";
 import { navigate } from "../lib/router";
 import { ITIL_CATEGORIES, ITIL_COLORS, itilParentOf } from "../data/options";
 import {
-  listCatalog, loadWizardFromSolution, deleteSolution,
+  listCatalog, listTeaserCatalog, loadWizardFromSolution, deleteSolution,
   deleteInitiativeWithSolutions, isCurrentUserAdmin, visibleContact,
   type InitiativeRow, type SolutionRow,
+  type TeaserInitiativeRow, type TeaserSolutionRow,
 } from "../lib/catalog";
 
 const accentFor = (itil: string | null | undefined) => ITIL_COLORS[itil ?? ""] ?? "#4a5560";
@@ -30,6 +31,8 @@ export default function SolutionsPage() {
   const loadPayload = useWizard((s) => s.loadPayload);
   const [initiatives, setInitiatives] = useState<InitiativeRow[]>([]);
   const [solutions, setSolutions] = useState<SolutionRow[]>([]);
+  const [teaserInitiatives, setTeaserInitiatives] = useState<TeaserInitiativeRow[]>([]);
+  const [teaserSolutions, setTeaserSolutions] = useState<TeaserSolutionRow[]>([]);
   const [admin, setAdmin] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState("");
@@ -57,6 +60,22 @@ export default function SolutionsPage() {
     }
   }, [auth.user?.id]);
 
+  useEffect(() => {
+    if (auth.ready && !auth.user && auth.configured) {
+      setStatus("loading");
+      listTeaserCatalog()
+        .then(({ initiatives, solutions }) => {
+          setTeaserInitiatives(initiatives);
+          setTeaserSolutions(solutions);
+          setStatus("ready");
+        })
+        .catch((e) => {
+          setError(e instanceof Error ? e.message : String(e));
+          setStatus("error");
+        });
+    }
+  }, [auth.ready, auth.user?.id]);
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return initiatives.filter((ini) => {
@@ -80,6 +99,25 @@ export default function SolutionsPage() {
     return counts;
   }, [initiatives]);
 
+  const teaserVisible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return teaserInitiatives.filter((ini) => {
+      if (itilFilter && (ini.itil_category ?? "") !== itilFilter) return false;
+      if (!q) return true;
+      return [ini.title, ini.description, ini.itil_category, ini.category]
+        .map((v) => String(v ?? "").toLowerCase()).join(" ").includes(q);
+    });
+  }, [teaserInitiatives, query, itilFilter]);
+
+  const teaserItilCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const ini of teaserInitiatives) {
+      const k = String(ini.itil_category ?? "");
+      if (k) counts[k] = (counts[k] ?? 0) + 1;
+    }
+    return counts;
+  }, [teaserInitiatives]);
+
   if (!auth.configured) {
     return (
       <div className="page"><h2>Community Design Solutions</h2>
@@ -88,10 +126,74 @@ export default function SolutionsPage() {
     );
   }
   if (!auth.ready) return <div className="page"><h2>Community Design Solutions</h2><p>…</p></div>;
+
   if (!auth.user) {
     return (
-      <div className="page"><h2>Community Design Solutions</h2>
-        <p className="callout warn">🔒 Sign in (Home page) to browse the shared catalog.</p>
+      <div className="page">
+        <h2>Community Design Solutions</h2>
+        <p className="callout">
+          🔒 <strong>Sign in to load designs into the wizard and see full details.</strong>{" "}
+          <button className="link-btn" onClick={() => navigate("/")}>Sign in on the Home page →</button>
+        </p>
+
+        <div className="catalog-toolbar">
+          <input type="text" className="catalog-search" placeholder="🔎 Search title, abstract, category…"
+                 value={query} onChange={(e) => setQuery(e.target.value)} />
+          <select className="catalog-filter" value={itilFilter ?? ""}
+                  onChange={(e) => setItilFilter(e.target.value || null)}
+                  style={itilFilter ? { borderColor: accentFor(itilFilter) } : undefined}>
+            <option value="">All ITIL categories ({teaserInitiatives.length})</option>
+            {ITIL_CATEGORIES.map((c) => (
+              <option key={c} value={c}>{c} ({teaserItilCounts[c] ?? 0})</option>
+            ))}
+          </select>
+        </div>
+
+        {status === "loading" && <p>Loading catalog…</p>}
+        {status === "error" && <p className="callout warn">❌ {error}</p>}
+        {status === "ready" && teaserInitiatives.length === 0 && (
+          <p className="callout">The catalog is empty — sign in and be the first to share a design.</p>
+        )}
+        {status === "ready" && teaserInitiatives.length > 0 && teaserVisible.length === 0 && (
+          <p className="callout">No matches — adjust the search or filter.</p>
+        )}
+
+        <div className="card-grid">
+          {teaserVisible.map((ini) => {
+            const sols = teaserSolutions.filter((s) => s.initiative_id === ini.id);
+            const itil = String(ini.itil_category ?? "");
+            const accent = accentFor(itil);
+            const abstract = ini.description ?? "";
+            return (
+              <article key={ini.id} className="sol-card" style={{ borderTopColor: accent }}>
+                <header>
+                  <h3>{ini.title}</h3>
+                  <div className="card-chips">
+                    {itil && <span className="chip static" style={{ borderColor: accent, color: accent }}>{itil}</span>}
+                    {ini.category && <span className="chip static">{ini.category}</span>}
+                  </div>
+                </header>
+                {abstract && (
+                  <p className="card-snippet">
+                    {abstract.length > 150 ? abstract.slice(0, 150) + "…" : abstract}
+                  </p>
+                )}
+                <p className="card-meta">{ini.created_at.slice(0, 10)} · {sols.length} solution{sols.length === 1 ? "" : "s"}</p>
+                <div className="card-solutions">
+                  {sols.map((s) => (
+                    <div key={s.id} className="card-sol-row">
+                      <span className="sol-name">
+                        {s.name || <em>unnamed</em>}
+                        {s.deployment_strategy && <span className="chip static small">{s.deployment_strategy}</span>}
+                      </span>
+                      <span className="sol-actions" title="Sign in to load this design">🔒</span>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     );
   }
