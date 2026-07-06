@@ -28,14 +28,6 @@ export default function HomePage() {
         )
       )}
 
-      <p>
-        This application helps you apply the Network Automation Forum's{" "}
-        <a href="https://reference.networkautomation.forum/Framework/Framework/" target="_blank" rel="noreferrer">
-          Network Automation Framework
-        </a>{" "}
-        to your automation projects.
-      </p>
-
       {/* Full-width framework hero */}
       <figure className="hero-figure">
         <img src="images/naf_arch_framework_figure2.png" alt="NAF Framework architecture" />
@@ -51,8 +43,11 @@ export default function HomePage() {
       <div className="hero-pitch">
         <h3>Design Solution Wizard</h3>
         <p>
-          Define the <strong>WHY, WHO, HOW, and WHAT</strong> of your automation
-          project. The wizard guides structured thinking across every NAF
+          Use the{" "}
+          <a href="https://reference.networkautomation.forum/Framework/Framework/" target="_blank" rel="noreferrer">
+            Network Automation Framework
+          </a>{" "}
+          to design your automation solution. The wizard guides structured thinking across every NAF
           component — stakeholders, scope, data flows, and build/buy/support
           decisions — so nothing critical is missed. Your selections generate a
           shareable solution design document for your team, stakeholders, and
