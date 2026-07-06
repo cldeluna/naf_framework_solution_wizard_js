@@ -47,9 +47,8 @@ export default function HomePage() {
           <a href="https://reference.networkautomation.forum/Framework/Framework/" target="_blank" rel="noreferrer">
             Network Automation Framework
           </a>{" "}
-          to design your automation solution. The wizard guides structured thinking across every NAF
-          component — stakeholders, scope, data flows, and build/buy/support
-          decisions — so nothing critical is missed. Your selections generate a
+          to help you design your automation solution. The wizard guides structured thinking across every NAF
+          block plus your project context (Problem Statement, Use Case, etc.) so nothing critical is missed. Your selections generate a
           shareable solution design document for your team, stakeholders, and
           management.
         </p>
