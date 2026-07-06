@@ -329,6 +329,10 @@ details.practice summary { font-size: 0.95rem; }
 .field-label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.35rem; }
 .req { color: #ff7043; }
 .field-hint { display: block; font-size: 0.78rem; color: var(--text-dim); margin-top: 0.25rem; }
+.tooltip-wrap { position: relative; display: inline-flex; align-items: center; margin-left: 0.35rem; vertical-align: middle; }
+.tooltip-btn { background: rgba(255,255,255,0.07); border: 1px solid var(--text-dim); border-radius: 50%; width: 1.1rem; height: 1.1rem; font-size: 0.65rem; font-weight: 700; cursor: pointer; color: var(--text-dim); padding: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+.tooltip-btn:hover, .tooltip-btn:focus { border-color: var(--text); color: var(--text); outline: none; }
+.tooltip-box { position: absolute; top: 1.5rem; left: 0; z-index: 200; background: #1e2d3d; border: 1px solid #3a5068; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.8rem; color: var(--text); width: 260px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); font-weight: 400; line-height: 1.45; }
 
 input[type="text"], textarea, select {
   width: 100%; background: var(--bg); color: var(--text);

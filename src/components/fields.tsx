@@ -2,8 +2,25 @@
  * Shared form field components. All fields are CONTROLLED and write to the
  * store on every change — no submit step, no data loss on close/navigation.
  */
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useCompact } from "../hooks/useCompact";
+
+function TooltipIcon({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <span className="tooltip-wrap">
+      <button type="button" className="tooltip-btn"
+              onClick={(e) => { e.preventDefault(); setOpen((o) => !o); }}
+              onBlur={() => setOpen(false)}
+              aria-label="Field help">?</button>
+      {open && (
+        <span className="tooltip-box" onMouseDown={(e) => e.preventDefault()}>
+          {text}
+        </span>
+      )}
+    </span>
+  );
+}
 
 /**
  * Renders children only in the Detailed view — for headings/blocks whose
@@ -17,8 +34,8 @@ export function DetailOnly({ children }: { children: ReactNode }) {
  * Field wrapper. In the global Compact ("Required only") view (SPEC §2.4),
  * optional fields are hidden — only required/recommended fields render.
  */
-export function Field({ label, required, recommended, children, hint }: {
-  label: string; required?: boolean; recommended?: boolean; hint?: string; children: ReactNode;
+export function Field({ label, required, recommended, children, hint, tooltip }: {
+  label: string; required?: boolean; recommended?: boolean; hint?: string; tooltip?: string; children: ReactNode;
 }) {
   const compact = useCompact();
   if (compact && !required && !recommended) return null;
@@ -26,6 +43,7 @@ export function Field({ label, required, recommended, children, hint }: {
     <label className="field">
       <span className="field-label">
         {label} {required && <span className="req">*</span>}
+        {tooltip && <TooltipIcon text={tooltip} />}
       </span>
       {children}
       {hint && <span className="field-hint">{hint}</span>}

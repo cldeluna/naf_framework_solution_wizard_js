@@ -21,6 +21,7 @@ schema or DB change unless noted.
 | **Timeline defaults** | `src/data/options.ts` → `DEFAULT_MILESTONES`, `HOLIDAY_REGIONS`, `BUILD_BUY_OPTIONS` | Changing default milestone *names*: also update `DEFAULT_MILESTONE_NAMES` (used by the piece-completion check) |
 | **Framework block colors** | `src/data/sections.ts` → `INNER_SECTIONS` | Single source: puzzle, Gantt, tool chips all read from here. Reserved palette — don't reuse these hues elsewhere |
 | **Required-field tiers** | `src/lib/fieldRegistry.ts` (app) + `contract/field_registry.py` (contract) | Keep both in sync; changes affect save-blocking, compact view, and puzzle completion |
+| **Field tooltips** (the `?` help text on each form field) | `src/components/forms.tsx` → find the relevant `<Form>` function (e.g. `ProblemStatementForm`) and edit the `tooltip="…"` prop on the `<Field>` that needs updating | Tooltip text is plain string — no rebuild needed beyond a dev-server reload. Only Problem Statement fields have tooltips so far; add `tooltip="…"` to any `<Field>` in any other form the same way |
 | **Payload shape** (add/remove fields) | `contract/wizard_models.py` → follow `contract/README.md` workflow (regen schema → copy → `npm run gen:types`) + DB migration if a column is involved | The heavyweight path — everything else above is data-only |
 
 ## File cleanup

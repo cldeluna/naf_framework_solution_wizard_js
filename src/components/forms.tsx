@@ -225,22 +225,23 @@ function ProblemStatementForm() {
   const setField = useWizard((s) => s.setField);
   return (
     <>
-      <Field label="Author" required>
+      <Field label="Author" required
+             tooltip="Your name or your team's name. Identifies who created this design and appears on your entry in the community catalog.">
         <TextInput value={ini.author} maxLength={100}
                    onChange={(v) => setField("initiative.author", v)} />
       </Field>
       <Field label="Title" required
-             hint="Displayed as the card heading in Community Design Solutions when this design is shared.">
+             tooltip="The name of this initiative. Displayed as the card heading in Community Design Solutions when this design is shared.">
         <TextInput value={ini.title} maxLength={200}
                    onChange={(v) => setField("initiative.title", v)} />
       </Field>
       <Field label="Abstract" required
-             hint="A short summary of scope and intent — shown beneath the title in Community Design Solutions.">
+             tooltip="Q: If someone had 30 seconds, what is this project? Write 2–3 sentences covering what gets automated, why it matters, and roughly how. This is the only text a visitor sees in the community catalog before clicking in — make it stand on its own. Unlike the Problem Statement (which describes the pain) or the Use Case (which describes the scenario), the Abstract is the elevator-pitch summary of both.">
         <TextArea value={ini.description} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.description", v)} />
       </Field>
       <Field label="ITIL Category" required
-             hint="The ITIL 4/5 practice this initiative falls under.">
+             tooltip="The ITIL 4/5 practice this initiative falls under. Choose the practice that best describes the operational process being automated — this controls the color coding on the community catalog card.">
         <Select options={OPT.ITIL_CATEGORIES} value={ini.itil_category}
                 onChange={(v) => {
                   setField("initiative.itil_category", v);
@@ -251,7 +252,8 @@ function ProblemStatementForm() {
                 }} />
       </Field>
       <Field label="Category" required
-             hint={ini.itil_category ? "Common categories for the selected ITIL practice — or Other." : "Select an ITIL Category first."}>
+             hint={ini.itil_category ? undefined : "Select an ITIL Category first."}
+             tooltip={ini.itil_category ? "The specific use-case category within the selected ITIL practice. Pick the closest match. Use Other if none fit." : undefined}>
         {ini.itil_category ? (
           <Select options={OPT.CATEGORY_TREE[ini.itil_category] ?? []} value={ini.category} allowOther
                   onChange={(v) => setField("initiative.category", v)} />
@@ -259,21 +261,23 @@ function ProblemStatementForm() {
           <select disabled><option>— Select an ITIL Category first —</option></select>
         )}
       </Field>
-      <Field label="Problem statement" required>
+      <Field label="Problem Statement" required
+             tooltip="Q: What is broken, painful, or missing today and why does it matter? Describe the current situation without describing the solution. Focus on operational pain: what takes too long, fails too often, or relies on manual steps that introduce risk. This is distinct from the Use Case (what the automation does) — the Problem Statement is about why it needs to exist at all.">
         <TextArea value={ini.problem_statement} rows={4} maxLength={2000}
                   onChange={(v) => setField("initiative.problem_statement", v)} />
       </Field>
-      <Field label="Use case — how will the solution be used?" required>
+      <Field label="Use Case — how are you solving the problem?" required
+             tooltip="Q: When this automation is working, who uses it and what does it do for them? Describe the scenario from the user or operator perspective — what triggers it, who benefits, and what outcome it delivers. This is distinct from the Problem Statement (the pain being solved) and the Workflow (the internal mechanics). Think of it as the happy-path story: 'A network engineer runs X, which automatically does Y, resulting in Z.'">
         <TextArea value={ini.use_case} rows={4} maxLength={2000}
                   onChange={(v) => setField("initiative.use_case", v)} />
       </Field>
-      <Field label="Workflow description" required
-             hint="Describe the workflow here. For structured steps, switch to Detailed mode and add them below.">
+      <Field label="Workflow Narrative" required
+             tooltip="Q: Walk me through what happens inside the automation from trigger to completion. Think of this as the narrative before you break it down into workflow steps. Describe the internal mechanics: what systems are called, what data moves where, what decisions are made, and how it ends. This is more technical than the Use Case — it is the internal 'how', not the user-facing 'what'. For a structured numbered breakdown, switch to Detailed view and add Workflow Steps below.">
         <TextArea value={ini.workflow_description} rows={4} maxLength={4000}
                   onChange={(v) => setField("initiative.workflow_description", v)} />
       </Field>
       <Field label="Workflow steps (optional)"
-             hint="Ordered steps with a name and description — rendered as a numbered list in the report.">
+             tooltip="Ordered steps rendered as a numbered list in the generated report. Each step has a short name and a description. Add as many rows as needed.">
         <table className="milestones">
           <thead><tr><th style={{ width: "30%" }}>Step</th><th>Description</th><th /></tr></thead>
           <tbody>
@@ -306,31 +310,38 @@ function ProblemStatementForm() {
           + Add workflow step
         </button>
       </Field>
-      <Field label="Error conditions">
+      <Field label="Error conditions"
+             tooltip="What can go wrong? Describe failure modes, edge cases, and states the automation must detect and handle gracefully — e.g. unreachable devices, API timeouts, unexpected configuration drift.">
         <TextArea value={ini.error_conditions} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.error_conditions", v)} />
       </Field>
-      <Field label="Assumptions">
+      <Field label="Assumptions"
+             tooltip="What must be true for this automation to work? List dependencies on existing infrastructure, data quality, team processes, credentials, or external systems that are outside your control.">
         <TextArea value={ini.assumptions} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.assumptions", v)} />
       </Field>
-      <Field label="Deployment strategy">
+      <Field label="Deployment strategy"
+             tooltip="How this solution will be rolled out to production. Choose the approach that best matches your risk tolerance and operational environment. See the Terms & Definitions page for descriptions of each strategy.">
         <Select options={OPT.DEPLOYMENT_STRATEGIES} value={ini.deployment_strategy} allowOther
                 onChange={(v) => setField("initiative.deployment_strategy", v)} />
       </Field>
-      <Field label="Deployment strategy description">
+      <Field label="Deployment strategy description"
+             tooltip="Describe your specific rollout plan — phases, pilot groups, rollback criteria, change-window constraints, or anything else that shapes how the chosen strategy will be executed.">
         <TextArea value={ini.deployment_strategy_description} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.deployment_strategy_description", v)} />
       </Field>
-      <Field label="Out of scope (optional)">
+      <Field label="Out of scope (optional)"
+             tooltip="Explicitly state what this automation will NOT do. Clear scope boundaries prevent scope creep, set stakeholder expectations, and make the design document more useful for reviews and handoffs.">
         <TextArea value={ini.out_of_scope} rows={3} maxLength={1000}
                   onChange={(v) => setField("initiative.out_of_scope", v)} />
       </Field>
-      <Field label="Risk of not doing the automation">
+      <Field label="Risk of not doing the automation"
+             tooltip="Select the standard business risks if this project does not move forward. These appear in the risk section of the generated report and help make the case for the initiative to stakeholders.">
         <CheckboxGrid options={OPT.STANDARD_RISK_REASONS} value={ini.no_move_forward_reasons}
                       onChange={(v) => setField("initiative.no_move_forward_reasons", v)} />
       </Field>
-      <Field label="Additional risks in not moving forward">
+      <Field label="Additional risks in not moving forward"
+             tooltip="Any project-specific risks not covered by the standard list above — business impact, compliance exposure, competitive disadvantage, or technical debt that grows if this is deferred.">
         <TextArea value={ini.no_move_forward} rows={3} maxLength={2000}
                   onChange={(v) => setField("initiative.no_move_forward", v)} />
       </Field>
