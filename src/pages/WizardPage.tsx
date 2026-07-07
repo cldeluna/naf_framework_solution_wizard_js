@@ -10,6 +10,7 @@ import PuzzleBoard from "../components/PuzzleBoard";
 import SectionPanel from "../components/SectionPanel";
 import CatalogActions from "../components/CatalogActions";
 import { FRAME_SECTIONS, INNER_SECTIONS, type SectionKey } from "../data/sections";
+import { GUIDED_ORDER, guidedStep } from "../data/guidedOrder";
 import type { ReactNode } from "react";
 
 /** Labeled button group — structure for the controls below the puzzle. */
@@ -19,19 +20,6 @@ function Group({ title, children, danger }: { title: string; children: ReactNode
       <h4 className="btn-group-title">{title}</h4>
       <div className="btn-group-body">{children}</div>
     </section>
-  );
-}
-
-function FieldViewToggle() {
-  const view = useWizard((s) => s.fieldView);
-  const setFieldView = useWizard((s) => s.setFieldView);
-  return (
-    <span className="badge" title="Applies to every section form.">
-      <button className={view === "required" ? "seg on" : "seg"}
-              onClick={() => setFieldView("required")}>🔎 Compact — Show Required Only Fields</button>
-      <button className={view === "all" ? "seg on" : "seg"}
-              onClick={() => setFieldView("all")}>🗂️ Detailed — Show All Fields</button>
-    </span>
   );
 }
 
@@ -67,6 +55,7 @@ export default function WizardPage() {
   const payload = useWizard((s) => s.payload);
   const openSection = useWizard((s) => s.openSection);
   const reset = useWizard((s) => s.reset);
+  const experienceMode = useWizard((s) => s.experienceMode);
   const completed = completionState(payload);
   const anyContent = Object.values(completed).some(Boolean);
 
@@ -114,7 +103,6 @@ export default function WizardPage() {
   return (
     <div className="page">
       <div className="wizard-toolbar">
-        <FieldViewToggle />
         <SaveIndicator />
       </div>
 
@@ -122,20 +110,34 @@ export default function WizardPage() {
         Click a puzzle piece to describe that part of your automation solution.
         The frame is your project context; the six inner pieces are the NAF
         framework components.
+        {experienceMode === "guided" && " Numbered steps guide you through the recommended order."}
       </p>
 
-      <PuzzleBoard completed={completed} onOpen={(k) => openSection(k)} />
+      {experienceMode === "guided" && !completed.problem_statement && (
+        <p className="callout info">
+          👆 <strong>Step 1 — Start here:</strong> open <strong>Problem Statement &amp; Use Case</strong> to lay the foundation for your design.
+        </p>
+      )}
+
+      <PuzzleBoard completed={completed} onOpen={(k) => openSection(k)}
+                   stepNumbers={experienceMode === "guided"
+                     ? Object.fromEntries(GUIDED_ORDER.map((k, i) => [k, i + 1])) as Record<import("../data/sections").SectionKey, number>
+                     : undefined} />
 
       {(() => {
         const sectionBtn = (s: { key: string; label: string; color: string; icon: string; tag?: string }) => {
           const key = s.key as SectionKey;
           const missing = missingRequired(payload, key).length;
+          const step = experienceMode === "guided" ? guidedStep(key) : 0;
+          const isNext = experienceMode === "guided" &&
+            step === (GUIDED_ORDER.findIndex((k) => !completed[k]) + 1);
           return (
-            <button key={s.key} className="section-btn"
+            <button key={s.key} className={isNext ? "section-btn next-up" : "section-btn"}
                     style={{ borderColor: s.color }}
                     title={missing ? "Has required fields still to complete" : undefined}
                     onClick={() => openSection(s.key)}>
               {completed[key] ? "✅" : s.icon}{" "}
+              {step > 0 && <span className="step-badge">{step}</span>}
               {s.tag && <span className="tag-chip" style={{ background: s.color }}>{s.tag}</span>}{" "}
               {s.label}
             </button>

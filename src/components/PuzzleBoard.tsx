@@ -10,6 +10,21 @@ import { INNER_SECTIONS, FRAME_SECTIONS, type SectionKey } from "../data/section
 interface Props {
   completed: Record<SectionKey, boolean>;
   onOpen: (key: SectionKey) => void;
+  stepNumbers?: Partial<Record<SectionKey, number>>;
+}
+
+function StepBadge({ x, y, step }: { x: number; y: number; step: number }) {
+  return (
+    <>
+      <circle cx={x} cy={y} r={11} fill="rgba(0,0,0,0.45)" />
+      <circle cx={x} cy={y} r={10} fill="#fffe03" />
+      <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
+            fontSize={step === 1 ? 11 : 9} fontWeight={800} fill="#111"
+            style={{ pointerEvents: "none" }}>
+        {step === 1 ? "▶" : step}
+      </text>
+    </>
+  );
 }
 
 /* ---- layout constants (identical to the original) ---- */
@@ -202,7 +217,14 @@ const labelProps = {
   style: { pointerEvents: "none" },
 } satisfies React.SVGProps<SVGTextElement>;
 
-export default function PuzzleBoard({ completed, onOpen }: Props) {
+function frameBadgePos(position: string, cx: number, cy: number): [number, number] {
+  if (position === "top")    return [cx - 290, cy];
+  if (position === "bottom") return [cx - 290, cy];
+  if (position === "left")   return [cx, cy - 68];
+  return                            [cx, cy - 68];
+}
+
+export default function PuzzleBoard({ completed, onOpen, stepNumbers }: Props) {
   const doneCount = Object.values(completed).filter(Boolean).length;
   const total = INNER_SECTIONS.length + FRAME_SECTIONS.length;
   const allDone = doneCount === total;
@@ -235,6 +257,10 @@ export default function PuzzleBoard({ completed, onOpen }: Props) {
                       : undefined}>
                 {s.label.toUpperCase()} {done ? "✓" : ""}
               </text>
+              {stepNumbers?.[s.key] != null && (() => {
+                const [bx, by] = frameBadgePos(s.position, info.cx, info.cy);
+                return <StepBadge x={bx} y={by} step={stepNumbers[s.key]!} />;
+              })()}
             </g>
           );
         })}
@@ -261,6 +287,9 @@ export default function PuzzleBoard({ completed, onOpen }: Props) {
               <text {...labelProps} fontSize={14} x={cx} y={cy + 22}>
                 {s.label} {done ? "✓" : ""}
               </text>
+              {stepNumbers?.[s.key] != null && (
+                <StepBadge x={x + 18} y={y + 18} step={stepNumbers[s.key]!} />
+              )}
             </g>
           );
         })}

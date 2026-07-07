@@ -44,6 +44,9 @@ function setPath<T>(obj: T, path: string, value: unknown): T {
 export type FieldView = "all" | "required";
 const VIEW_KEY = "naf-wizard-field-view";
 
+export type ExperienceMode = "freeform" | "guided";
+const EXP_KEY = "naf-wizard-experience";
+
 export interface WizardStore {
   payload: WizardPayload;
   /** True when this session started from a restored localStorage draft. */
@@ -53,6 +56,9 @@ export interface WizardStore {
   /** Global field view: "required" hides optional fields (compact). */
   fieldView: FieldView;
   setFieldView: (v: FieldView) => void;
+  /** UX experience: guided adds step numbers + Next button; freeform is open. */
+  experienceMode: ExperienceMode;
+  setExperienceMode: (v: ExperienceMode) => void;
   setField: (path: string, value: unknown) => void;
   openSection: (key: string | null) => void;
   /**
@@ -76,6 +82,11 @@ export const useWizard = create<WizardStore>((set) => ({
   setFieldView: (v) => {
     localStorage.setItem(VIEW_KEY, v);
     set({ fieldView: v });
+  },
+  experienceMode: (localStorage.getItem(EXP_KEY) as ExperienceMode) || "freeform",
+  setExperienceMode: (v) => {
+    localStorage.setItem(EXP_KEY, v);
+    set({ experienceMode: v });
   },
   setField: (path, value) =>
     set((s) => ({ payload: setPath(s.payload, path, value) })),
