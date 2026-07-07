@@ -249,6 +249,17 @@ details.practice summary { font-size: 0.95rem; }
 .report-html a { color: #7fbfff; }
 .gantt-wrap svg { width: 100%; height: auto; border-radius: 8px; margin: 0.5rem 0; }
 
+.user-guide-body { font-size: 0.88rem; line-height: 1.6; padding: 0.5rem 0.25rem; }
+.user-guide-body h1 { font-size: 1.2rem; border-bottom: 2px solid var(--naf-yellow); padding-bottom: 0.2rem; margin: 1.2rem 0 0.5rem; }
+.user-guide-body h2 { font-size: 1rem; color: var(--naf-yellow); margin: 1.1rem 0 0.3rem; }
+.user-guide-body h3 { font-size: 0.93rem; margin: 0.9rem 0 0.25rem; }
+.user-guide-body table { border-collapse: collapse; width: 100%; margin: 0.6rem 0; }
+.user-guide-body th, .user-guide-body td { border: 1px solid var(--border); padding: 0.3rem 0.55rem; text-align: left; }
+.user-guide-body th { background: var(--bg); font-weight: 600; }
+.user-guide-body code { background: var(--bg); padding: 0.1em 0.35em; border-radius: 3px; font-size: 0.9em; }
+.user-guide-body a { color: #7fbfff; }
+.user-guide-body hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
 .admin-badge {
   font-size: 0.65rem; font-weight: 700; vertical-align: middle;
   color: #ffb74d; border: 1px solid #ffb74d; border-radius: 10px;

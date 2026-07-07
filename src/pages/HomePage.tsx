@@ -4,6 +4,8 @@
  */
 import { useAuth } from "../hooks/useAuth";
 import { navigate } from "../lib/router";
+import { renderMarkdown } from "../lib/markdown";
+import userGuideRaw from "../../USER_GUIDE.md?raw";
 
 export default function HomePage() {
   const auth = useAuth();
@@ -87,6 +89,12 @@ export default function HomePage() {
           editing — the JSON can be shared with others. Signed-in users can
           additionally save to the shared community catalog.
         </p>
+      </details>
+
+      <details>
+        <summary>📖 User Guide</summary>
+        <div className="user-guide-body"
+             dangerouslySetInnerHTML={{ __html: renderMarkdown(userGuideRaw) }} />
       </details>
 
       <details>
