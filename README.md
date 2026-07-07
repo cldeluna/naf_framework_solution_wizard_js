@@ -83,7 +83,9 @@ Click any piece (or the matching button below the puzzle) to open its form in a 
 
 Every form has a **Custom / Other** option with a free-text field for anything not covered by the preset checkboxes. If you can't answer a question technically, note that the function is needed and describe it in the Custom field.
 
-**Field View** is controlled from the left sidebar (Detailed / Compact) and applies to every section form by default. Each form panel also has its own toggle in the top-right corner for a per-section override. See [Navigation and experience settings](#navigation-and-experience-settings) above.
+**Field tooltips.** Every field has a **?** button next to its label. Click or tap it to see a contextual hint — what the field means in NAF terms, what a good answer looks like, and why it matters for the generated report. Key narrative fields (Problem Statement, Use Case, Abstract, Workflow) lead with a guiding question to help you frame your answer.
+
+**Experience mode** (Guided or Free Form) and **Field View** (Detailed or Compact) are set in the left sidebar and apply across all section forms. See [Navigation and experience settings](#navigation-and-experience-settings) above. Each form panel also has its own Compact / Detailed override in the top-right corner.
 
 **Autosave.** Every keystroke writes to your browser's local storage — closing a panel, refreshing, or signing in mid-wizard never discards what you've entered. The toolbar badge shows when the draft was last autosaved, or that a prior draft was restored.
 
