@@ -26,7 +26,10 @@ function AuthBadge() {
     </span>
   ) : (
     <span className="badge">
-      <button onClick={auth.signInWithGoogle}>🔐 Sign in with Google</button>
+      <button onClick={auth.signInWithGoogle}
+              title="Sign in to load community designs into the wizard, save your design to the shared catalog, and see full design details.">
+        🔐 Sign in with Google
+      </button>
     </span>
   );
 }
