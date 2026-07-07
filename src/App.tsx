@@ -65,27 +65,27 @@ export default function App() {
         <div className="sidebar-ux">
           <div className="sidebar-section-label">Experience</div>
           <span className="badge">
-            <button className={experienceMode === "freeform" ? "seg on" : "seg"}
+            <button className={experienceMode === "freeform" ? "seg on" : "seg seg-dim"}
                     onClick={() => setExperienceMode("freeform")}>Free Form</button>
-            <button className={experienceMode === "guided" ? "seg on" : "seg"}
+            <button className={experienceMode === "guided" ? "seg on" : "seg seg-dim"}
                     onClick={() => setExperienceMode("guided")}>Guided</button>
           </span>
           <p className="sidebar-ux-hint">
             {experienceMode === "freeform"
               ? "Start anywhere, in any order. Best when you already know the NAF framework or prefer to fill in sections as ideas come to you."
-              : "A concierge experience — numbered steps walk you through the business and solution design in the recommended order, with a Next → button at each step so you always know where to go."}
+              : "A concierge experience with numbered steps and a Next → button at each step, walking you through the business and solution design in the recommended order."}
           </p>
 
           <div className="sidebar-section-label">Field View</div>
           <span className="badge">
-            <button className={fieldView === "all" ? "seg on" : "seg"}
+            <button className={fieldView === "all" ? "seg on" : "seg seg-dim"}
                     onClick={() => setFieldView("all")}>🗂️ Detailed</button>
-            <button className={fieldView === "required" ? "seg on" : "seg"}
+            <button className={fieldView === "required" ? "seg on" : "seg seg-dim"}
                     onClick={() => setFieldView("required")}>🔎 Compact</button>
           </span>
           <p className="sidebar-ux-hint">
             {fieldView === "all"
-              ? "Shows every field. Choose this for a thorough, complete design document that captures the full nuance of your solution — richer output, better conversations with stakeholders."
+              ? "Shows every field for a thorough, complete design document that captures the full nuance of your solution — richer output, better conversations with stakeholders."
               : "Shows only required fields — faster to complete and good for a first pass. Switch to Detailed any time to add context and produce a more complete design."}
           </p>
         </div>

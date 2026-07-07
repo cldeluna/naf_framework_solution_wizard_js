@@ -53,6 +53,7 @@ body {
   font-size: 0.72rem; color: var(--text-dim); margin: 0.1rem 0 0;
   line-height: 1.35;
 }
+.seg.seg-dim { opacity: 0.38; }
 .sidebar-auth {
   margin-top: auto; padding: 0.7rem 1rem;
   border-top: 1px solid var(--border);
