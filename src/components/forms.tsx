@@ -23,22 +23,26 @@ function PresentationForm() {
         systems, chat, portals, reports. It should provide robust, flexible
         authentication and may support both read and write operations.
       </p>
-      <Field label="Intended users">
+      <Field label="Intended users"
+             tooltip="Q: Who will interact with this automation directly? Think about who logs in, runs the tool, receives its output, or triggers it — not everyone affected, just those who touch the interface.">
         <CheckboxGrid options={OPT.PRESENTATION_USERS} value={sel.users}
                       onChange={(v) => setField("presentation.selections.users", v)}
                       customLabel="Custom users" />
       </Field>
-      <Field label="How will your users interact with your solution?">
+      <Field label="How will your users interact with your solution?"
+             tooltip="Q: What is the primary interface — a command line, a web portal, an API call, or something else? Select all that apply if different users interact in different ways.">
         <CheckboxGrid options={OPT.PRESENTATION_INTERACTIONS} value={sel.interactions}
                       onChange={(v) => setField("presentation.selections.interactions", v)}
                       customLabel="Custom interaction" />
       </Field>
-      <Field label="What tools will the Presentation layer use?">
+      <Field label="What tools will the Presentation layer use?"
+             tooltip="Q: What software or frameworks will build or host the user-facing layer? This is distinct from collection or execution tools — focus on what the user sees and clicks.">
         <CheckboxGrid options={OPT.PRESENTATION_TOOLS} value={sel.tools}
                       onChange={(v) => setField("presentation.selections.tools", v)}
                       customLabel="Custom tool(s)" />
       </Field>
-      <Field label="How will your users authenticate?">
+      <Field label="How will your users authenticate?"
+             tooltip="Q: How do users prove their identity before the automation acts on their behalf? Consider both the risk level of the operation and what your organization already supports.">
         <CheckboxGrid options={OPT.PRESENTATION_AUTH} value={sel.auth}
                       onChange={(v) => setField("presentation.selections.auth", v)}
                       customLabel="Other authentication details" />
@@ -57,12 +61,14 @@ function IntentForm() {
         Intent captures what the automation should achieve and how that desired
         state is expressed and consumed.
       </p>
-      <Field label="How will Intent be developed?">
+      <Field label="How will Intent be developed?"
+             tooltip="Q: How is the desired state or goal expressed — as templates, policies, data models, or hand-crafted config? Intent is the 'what' the automation is told to achieve before it acts. This is distinct from how it is delivered (next field).">
         <CheckboxGrid options={OPT.INTENT_DEVELOPMENT} value={sel.development}
                       onChange={(v) => setField("intent.selections.development", v)}
                       customLabel="Custom intent development approach" />
       </Field>
-      <Field label="How will intent be consumed by automation?">
+      <Field label="How will intent be consumed by automation?"
+             tooltip="Q: In what format does the automation receive its instructions — a text file, serialized YAML/JSON, a spreadsheet, or an API call? This is how the desired state gets handed off from whoever creates it to the system that acts on it.">
         <CheckboxGrid options={OPT.INTENT_PROVIDED} value={sel.provided}
                       onChange={(v) => setField("intent.selections.provided", v)}
                       customLabel="Custom provider format" />
@@ -81,15 +87,18 @@ function ObservabilityForm() {
         Observability determines network state and whether the automation can
         proceed (go/no-go), including any additional gating logic.
       </p>
-      <Field label="How will you determine network state?">
+      <Field label="How will you determine network state?"
+             tooltip="Q: Before acting, how does the automation know what the network currently looks like? This data feeds the go/no-go decision. Select every method in use — most automations combine at least two.">
         <CheckboxGrid options={OPT.OBSERVABILITY_METHODS} value={sel.methods}
                       onChange={(v) => setField("observability.selections.methods", v)} />
       </Field>
-      <Field label="Describe the basic go/no-go logic">
+      <Field label="Describe the basic go/no-go logic"
+             tooltip="Q: What conditions must be true before the automation is allowed to proceed? Be specific — e.g. 'device must be reachable, running IOS-XE 17.x or later, and not already in maintenance mode'. This is the primary safety gate.">
         <TextArea value={sel.go_no_go_text} rows={4} maxLength={1000}
                   onChange={(v) => setField("observability.selections.go_no_go_text", v)} />
       </Field>
-      <Field label="Additional logic applied to state before the automation can move forward?">
+      <Field label="Additional logic applied to state before the automation can move forward?"
+             tooltip="Q: Is there gating logic beyond basic reachability — compliance checks, threshold comparisons, approval gates, or correlation across multiple devices? If so, describe it in the text box that appears.">
         <div className="radio-group">
           <label className="check">
             <input type="radio" name="obs-add" checked={!sel.additional_logic_enabled}
@@ -108,7 +117,8 @@ function ObservabilityForm() {
                     onChange={(v) => setField("observability.selections.additional_logic_text", v)} />
         )}
       </Field>
-      <Field label="What tools will support the observability layer?">
+      <Field label="What tools will support the observability layer?"
+             tooltip="Q: What software will collect or evaluate the network state data — open-source scripts, a commercial NMS, a vendor platform, or custom code? If you use a specific tool not listed, add it via Custom.">
         <CheckboxGrid options={OPT.OBSERVABILITY_TOOLS} value={sel.tools}
                       onChange={(v) => setField("observability.selections.tools", v)}
                       customLabel="Other observability tool(s)" />
@@ -128,7 +138,8 @@ function OrchestrationForm() {
         Orchestration coordinates multi-step workflows across the other
         framework components (or the solution may not need a distinct layer).
       </p>
-      <Field label="Will the solution utilize orchestration?">
+      <Field label="Will the solution utilize orchestration?"
+             tooltip="Q: Does this automation need a coordinator to sequence steps across multiple systems or NAF components — or does a single script handle everything start to finish? Many simpler automations skip a dedicated orchestration layer entirely. If unsure, start with 'No' and revisit.">
         <div className="radio-group">
           {OPT.ORCHESTRATION_CHOICES.map((opt) => (
             <label key={opt} className="check">
@@ -140,7 +151,8 @@ function OrchestrationForm() {
         </div>
       </Field>
       {needsDetails && (
-        <Field label="Describe the orchestration approach">
+        <Field label="Describe the orchestration approach"
+               tooltip="Q: Which orchestration tool or pattern will you use, and how does it sequence the work? Describe what it coordinates — the order of NAF layer calls, error handling between steps, and any parallel vs. sequential branching.">
           <TextArea value={sel.details} rows={4} maxLength={1000}
                     onChange={(v) => setField("orchestration.selections.details", v)} />
         </Field>
@@ -159,39 +171,47 @@ function CollectorForm() {
         The Collector gathers data from the network — protocols, authentication,
         traffic handling, normalization, and scale.
       </p>
-      <Field label="Collection methods (protocols/APIs)">
+      <Field label="Collection methods (protocols/APIs)"
+             tooltip="Q: How does the automation talk to network devices or systems to gather data? Select every protocol in use — most environments mix at least two (e.g. SNMP for legacy gear, gNMI for newer platforms).">
         <CheckboxGrid options={OPT.COLLECTOR_METHODS} value={sel.methods}
                       onChange={(v) => setField("collector.selections.methods", v)}
                       customLabel="Other protocol/API" />
       </Field>
-      <Field label="Authentication">
+      <Field label="Authentication"
+             tooltip="Q: How does the collector authenticate to the devices or APIs it queries? This may differ per protocol — e.g. SNMPv3 credentials for polling, service-account tokens for REST APIs, SSH keys for CLI scraping.">
         <CheckboxGrid options={OPT.COLLECTOR_AUTH} value={sel.auth}
                       onChange={(v) => setField("collector.selections.auth", v)}
                       customLabel="Other authentication method(s)" />
       </Field>
-      <Field label="Traffic handling">
+      <Field label="Traffic handling"
+             tooltip="Q: How does the collector cope with unreliable targets, high request rates, or backpressure — retries, rate-limiting, queue buffering, circuit breaking? Select the patterns your design will implement.">
         <CheckboxGrid options={OPT.COLLECTOR_HANDLING} value={sel.handling}
                       onChange={(v) => setField("collector.selections.handling", v)}
                       customLabel="Other traffic handling approach(es)" />
       </Field>
-      <Field label="Normalization and schemas">
+      <Field label="Normalization and schemas"
+             tooltip="Q: What transformations happen to the raw collected data before it is used downstream — vendor-specific value mapping, timestamp normalization, topology enrichment, schema validation? Select all that apply.">
         <CheckboxGrid options={OPT.COLLECTOR_NORMALIZATION} value={sel.normalization}
                       onChange={(v) => setField("collector.selections.normalization", v)}
                       customLabel="Other normalization approach(es)" />
       </Field>
-      <Field label="Scale — devices/scope">
+      <Field label="Scale — devices/scope"
+             tooltip="Q: Roughly how many devices or endpoints will the collector target? An order-of-magnitude estimate (e.g. ~50 core routers vs. ~5,000 branch switches) surfaces design constraints early — polling 50 devices is architecturally different from polling 5,000.">
         <TextInput value={sel.devices} maxLength={100} placeholder="e.g. ~500 campus switches"
                    onChange={(v) => setField("collector.selections.devices", v)} />
       </Field>
-      <Field label="Scale — metrics/data volume">
+      <Field label="Scale — metrics/data volume"
+             tooltip="Q: What is the approximate data throughput — polling interval × device count, streaming events per second, log lines per minute? Even a rough number helps size the pipeline and identify whether the collector needs horizontal scaling.">
         <TextInput value={sel.metrics_per_sec} maxLength={100} placeholder="e.g. 2k metrics/sec"
                    onChange={(v) => setField("collector.selections.metrics_per_sec", v)} />
       </Field>
-      <Field label="Collection cadence">
+      <Field label="Collection cadence"
+             tooltip="Q: How frequently does the collector run or poll — continuously (streaming), every 60 seconds, on-demand only? Cadence drives both the freshness of your observability data and the load placed on target devices.">
         <TextInput value={sel.cadence} maxLength={100} placeholder="e.g. every 5 minutes"
                    onChange={(v) => setField("collector.selections.cadence", v)} />
       </Field>
-      <Field label="Collection tools">
+      <Field label="Collection tools"
+             tooltip="Q: What software will implement the collector — an open-source library, a commercial product, a vendor SDK, or custom scripts? Select all that apply; add unlisted tools via Custom.">
         <CheckboxGrid options={OPT.COLLECTOR_TOOLS} value={sel.tools}
                       onChange={(v) => setField("collector.selections.tools", v)}
                       customLabel="Other collection tool(s)" />
@@ -210,7 +230,8 @@ function ExecutorForm() {
         The Executor makes the actual changes to the network. It should support
         dry-run, transactional execution, and idempotent operations.
       </p>
-      <Field label="How will your solution execute change?">
+      <Field label="How will your solution execute change?"
+             tooltip="Q: What method or tool pushes configuration changes to the network? This is the 'hand on the keyboard' of the automation — choose the approach that matches your environment, existing toolchain, and risk tolerance. Select all that apply if you use different methods per device type.">
         <CheckboxGrid options={OPT.EXECUTOR_METHODS} value={sel.methods}
                       onChange={(v) => setField("executor.selections.methods", v)}
                       customLabel="Custom execution approach" />
@@ -357,15 +378,18 @@ function StakeholdersForm() {
   return (
     <>
       <h3>My Role</h3>
-      <Field label="Who's filling out this wizard?" required>
+      <Field label="Who's filling out this wizard?" required
+             tooltip="Q: What is your relationship to this project? Are you the network engineer who will build it, a manager sponsoring it, or a consultant scoping it? This sets context for readers of the generated design document.">
         <RadioWithOther name="who" options={OPT.MY_ROLE_WHO} value={my.who}
                         onChange={(v) => setField("my_role.who", v)} />
       </Field>
-      <Field label="What best describes your technical skills?" required>
+      <Field label="What best describes your technical skills?" required
+             tooltip="Q: How would you rate your automation and programming experience? This helps assess whether the proposed design is a good fit for the team and whether outside help may be needed.">
         <RadioWithOther name="skills" options={OPT.MY_ROLE_SKILLS} value={my.skills}
                         onChange={(v) => setField("my_role.skills", v)} />
       </Field>
-      <Field label="Who will actually develop the network automation?" required>
+      <Field label="Who will actually develop the network automation?" required
+             tooltip="Q: Will you build this yourself, with your internal team, or bring in external expertise? This drives staffing assumptions in the Timeline section and signals to reviewers what delivery model is planned.">
         <RadioWithOther name="dev" options={OPT.MY_ROLE_DEV} value={my.developer}
                         onChange={(v) => setField("my_role.developer", v)} />
       </Field>
@@ -378,7 +402,8 @@ function StakeholdersForm() {
                         onChange={(v) => setField(`stakeholders.choices.${category}`, v)} />
         </Field>
       ))}
-      <Field label="Other stakeholders">
+      <Field label="Other stakeholders"
+             tooltip="Q: Are there individuals, teams, or groups affected by this automation who aren't covered by the categories above? Include anyone who needs to approve, will be impacted by, or should be kept informed of the work.">
         <TextArea value={stakeholders.other} rows={2} maxLength={500}
                   onChange={(v) => setField("stakeholders.other", v)} />
       </Field>
@@ -404,11 +429,12 @@ function DependenciesForm() {
   return (
     <>
       <Field label="Dependencies & external interfaces narrative (Markdown supported)" required
-             hint="Describe the external systems this automation depends on or interfaces with, and how.">
+             tooltip="Q: What external systems does this automation depend on, and how does it interact with them? Write a paragraph for each key dependency — what it provides, how the automation connects to it (API, webhook, file drop, etc.), and what breaks if it is unavailable. Markdown is supported so you can use headers or bullet points.">
         <TextArea value={narrative} rows={4} maxLength={4000}
                   onChange={(v) => setField("dependencies_narrative", v)} />
       </Field>
-      <Field label="External systems this automation will interact with">
+      <Field label="External systems this automation will interact with"
+             tooltip="Q: Which standard systems will your automation touch or depend on? Check all that apply and fill in the details field to identify the specific product, instance, or version in your environment.">
         <div>
           {OPT.DEPENDENCY_DEFS.map((d) => {
             const cur = entry(d.label);
@@ -475,7 +501,8 @@ function TimelineForm() {
       </p>
 
       <h3>Staffing plan</h3>
-      <Field label="Development approach" required>
+      <Field label="Development approach" required
+             tooltip="Q: Will you build this automation in-house, procure a commercial solution, or combine both? This is about where the software comes from, not who implements it — a vendor product installed by your own team is still 'Buy'.">
         <div className="radio-group">
           {OPT.BUILD_BUY_OPTIONS.map((opt) => (
             <label key={opt} className="check">
@@ -488,35 +515,40 @@ function TimelineForm() {
       </Field>
       <div className="two-col">
         <Field label="Direct staff on project"
-               hint="Direct employees from your team or another team in your organization.">
+               tooltip="Count of direct employees (your team or another internal team) working on this project. Contractors billing through your org count here too if they are on your headcount.">
           <input type="number" min={0} step={1} value={tl.staff_count}
                  onChange={(e) => setField("timeline.staff_count", Math.max(0, Number(e.target.value) || 0))} />
         </Field>
-        <Field label="Professional services staff" hint="External staff working on the project.">
+        <Field label="Professional services staff"
+               tooltip="Count of external/vendor professional services staff engaged on this project — consultants, SIs, or vendor PS teams billing separately from your org.">
           <input type="number" min={0} step={1} value={tl.external_staff_count}
                  onChange={(e) => setField("timeline.external_staff_count", Math.max(0, Number(e.target.value) || 0))} />
         </Field>
       </div>
-      <Field label="Staffing plan (Markdown supported)" required>
+      <Field label="Staffing plan (Markdown supported)" required
+             tooltip="Q: Who is working on this project and in what capacity? Describe roles, responsibilities, and approximate time commitments. Markdown is supported — a simple bullet list or table works well. This appears in the generated design document under the staffing section.">
         <TextArea value={tl.staffing_plan_md} rows={4}
                   onChange={(v) => setField("timeline.staffing_plan_md", v)} />
       </Field>
 
       <DetailOnly><h3>Timeline & milestones</h3></DetailOnly>
       <div className="two-col">
-        <Field label="Holiday calendar" hint="Recorded for business-day math; region skipping lands with the holiday library.">
+        <Field label="Holiday calendar"
+               tooltip="Select your region so public holidays are excluded from business-day calculations. This affects the computed start/end dates in the milestone table below.">
           <select value={tl.holiday_region || "None"}
                   onChange={(e) => setField("timeline.holiday_region", e.target.value)}>
             {OPT.HOLIDAY_REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
           </select>
         </Field>
-        <Field label="Project start date">
+        <Field label="Project start date"
+               tooltip="Q: When do you plan to begin active work? This date drives all computed milestone start/end dates in the table below. You can always update it — the milestone dates recalculate automatically.">
           <input type="date" value={startDate}
                  onChange={(e) => writeSchedule(e.target.value, items)} />
         </Field>
       </div>
 
-      <Field label="Milestones" hint="Name, duration in business days, notes. Dates are computed.">
+      <Field label="Milestones"
+             tooltip="Q: What are the major phases of this project and how long will each take? Enter names and durations in business days — start/end dates are computed automatically from the project start date. If two people work a phase in parallel, model it at roughly half the calendar days.">
         <table className="milestones">
           <thead>
             <tr><th>Milestone</th><th>Days</th><th>Start</th><th>End</th><th>Notes</th><th /></tr>
