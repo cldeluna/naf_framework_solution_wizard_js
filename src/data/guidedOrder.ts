@@ -8,10 +8,10 @@ export const GUIDED_ORDER: SectionKey[] = [
   "dependencies",
   "presentation",
   "intent",
+  "orchestration",
+  "observability",
   "collector",
   "executor",
-  "observability",
-  "orchestration",
 ];
 
 const ALL_META = [...FRAME_SECTIONS, ...INNER_SECTIONS];
