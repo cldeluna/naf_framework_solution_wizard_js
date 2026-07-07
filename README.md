@@ -17,10 +17,41 @@ The app is designed around two distinct modes, and you can move between them at 
 | **Fill out the wizard** | ✅ Full puzzle, all ten sections | ✅ Same |
 | **Download your work** | ✅ JSON or the JSON+Markdown+Gantt ZIP bundle | ✅ Same |
 | **Upload/reload your work** | ✅ Load a previously downloaded `naf_report_*.json` back into the wizard | ✅ Same |
-| **Browse what others have shared** (the Solutions catalog — problem statements, use cases, and solution designs from the community) | ❌ Not available | ✅ Required |
+| **Browse the Community Solutions catalog** (titles, ITIL category, and a short abstract preview for each published design) | ✅ Teaser cards visible — sign in to load a design or see full details | ✅ Full catalog with Load, fork, and delete controls |
 | **Save your design to the shared catalog, or edit/update one you already saved** | ❌ Not available | ✅ Required |
 
 In short: **everything you need to work through the wizard on your own — filling it in, downloading it, coming back and loading it again — is available with no account at all.** Signing in only comes into play the moment you want to either look at what other people in the community have submitted, or publish/edit your own entry in that shared catalog. See "Home page" and "Solutions page" below for the specifics.
+
+### Navigation and experience settings
+
+Every page is framed by a **left sidebar** that stays visible as you work:
+
+- **Nav links** — Home, Design Solution Wizard, Community Solutions, Admin, Terms. The active page is highlighted with a yellow underline.
+- **Experience** toggle (Guided / Free Form) — controls how the Wizard is paced. See below.
+- **Field View** toggle (Detailed / Compact) — global default for every section form; can be overridden per panel inside the form. See below.
+- **Auth badge** — shows your sign-in state; sign in / sign out without navigating away.
+
+**On mobile (narrow screens)** the sidebar collapses into a compact horizontal bar at the top of the screen. Nav links show as emoji icons only (the full label appears as a tooltip on tap/hover). The Experience, Field View, and auth controls are hidden on mobile — set them on a wider screen first; the choices persist in browser storage and apply on mobile automatically.
+
+#### Experience modes
+
+| Mode | What it does |
+|---|---|
+| **Free Form** (default) | Open sandbox — start any section in any order. Best when you already know the NAF framework or prefer to fill things in as ideas come. |
+| **Guided** | Concierge experience — sections are numbered 1–10 in the recommended order. Each puzzle piece and section button shows its step number. Each open form shows "Step N of 10" in the header and a **Next → Step N+1** button at the bottom, walking you through business and solution design in sequence. |
+
+Guided order: Problem Statement → Stakeholders → Staffing & Timeline → Dependencies → Presentation → Intent → Orchestration → Observability → Collector → Executor.
+
+Switching modes mid-session is safe — your data is never affected, only the step numbering and Next button appear or disappear.
+
+#### Field View
+
+| View | What it shows |
+|---|---|
+| **Detailed** (default) | Every field — for a thorough, complete design document that captures full nuance. Richer output, better conversations with stakeholders. |
+| **Compact** | Required fields only — faster to fill in and good for a first pass. Switch to Detailed any time to add depth. |
+
+The sidebar toggle sets the global default. Each individual form panel also has its own Compact / Detailed toggle in the top-right corner for a one-off override without changing the global default.
 
 ### Home page
 
@@ -52,9 +83,7 @@ Click any piece (or the matching button below the puzzle) to open its form in a 
 
 Every form has a **Custom / Other** option with a free-text field for anything not covered by the preset checkboxes. If you can't answer a question technically, note that the function is needed and describe it in the Custom field.
 
-**Required Only vs. All Fields.** The toggle at the top of the Wizard page controls every section form:
-- **🔎 Required Only** shows just the fields needed before you can save to the shared catalog.
-- **🗂️ All Fields** shows the full, detailed form.
+**Field View** is controlled from the left sidebar (Detailed / Compact) and applies to every section form by default. Each form panel also has its own toggle in the top-right corner for a per-section override. See [Navigation and experience settings](#navigation-and-experience-settings) above.
 
 **Autosave.** Every keystroke writes to your browser's local storage — closing a panel, refreshing, or signing in mid-wizard never discards what you've entered. The toolbar badge shows when the draft was last autosaved, or that a prior draft was restored.
 
@@ -72,7 +101,9 @@ A live preview ("📄 Detailed solution description") shows the rendered report 
 
 ### Solutions page (shared catalog)
 
-Available to signed-in users. The catalog is a **card grid** — one summary card per initiative, everything visible without expanding anything:
+Signed-out visitors see **teaser cards** — title, ITIL category chips, and a short problem-statement preview. Signing in unlocks full details, the Load button, and save/delete controls.
+
+The catalog is a **card grid** — one summary card per initiative, everything visible without expanding anything:
 
 - Each card shows the **title**, **ITIL practice + category chips** (the card's top edge is color-coded by ITIL practice, matching the puzzle palette), a short **problem-statement snippet**, the submitter/date/solution-count line, and every **solution inline** with its deployment-strategy chip.
 - **🔎 Search box** filters live across title, problem statement, use case, category, and author; an **ITIL category dropdown** beside it narrows the grid to one practice — it always lists all eight practices with a count of how many initiatives each holds.
