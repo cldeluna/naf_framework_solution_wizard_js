@@ -119,7 +119,10 @@ export default function WizardPage() {
         </p>
       )}
 
-      <PuzzleBoard completed={completed} onOpen={(k) => openSection(k)} />
+      <PuzzleBoard completed={completed} onOpen={(k) => openSection(k)}
+                   stepNumbers={experienceMode === "guided"
+                     ? Object.fromEntries(GUIDED_ORDER.map((k, i) => [k, i + 1])) as Record<import("../data/sections").SectionKey, number>
+                     : undefined} />
 
       {(() => {
         const sectionBtn = (s: { key: string; label: string; color: string; icon: string; tag?: string }) => {
