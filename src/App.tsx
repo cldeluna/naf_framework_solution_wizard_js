@@ -25,11 +25,13 @@ function AuthBadge() {
       <button onClick={auth.signOut}>Log out</button>
     </span>
   ) : (
-    <span className="badge">
-      <button onClick={auth.signInWithGoogle}
-              title="Sign in to load community designs into the wizard, save your design to the shared catalog, and see full design details.">
-        🔐 Sign in with Google
-      </button>
+    <span className="badge" style={{ flexDirection: "column", alignItems: "flex-start", gap: "0.4rem" }}>
+      <button onClick={auth.signInWithGoogle}>🔐 Sign in with Google</button>
+      <span className="sidebar-ux-hint">
+        Sign in with Google to save to / load from the shared catalog. You can still use the wizard
+        and download JSON without signing in — signing in later will not clear a half-filled wizard
+        (drafts are saved in your browser).
+      </span>
     </span>
   );
 }
