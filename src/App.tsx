@@ -28,9 +28,8 @@ function AuthBadge() {
     <span className="badge" style={{ flexDirection: "column", alignItems: "flex-start", gap: "0.4rem" }}>
       <button onClick={auth.signInWithGoogle}>🔐 Sign in with Google</button>
       <span className="sidebar-ux-hint">
-        Sign in with Google to save to / load from the shared catalog. You can still use the wizard
-        and download JSON without signing in — signing in later will not clear a half-filled wizard
-        (drafts are saved in your browser).
+        Sign in with Google to save to / load (fork) from the shared catalog. You can still use the wizard
+        and download JSON without signing in.
       </span>
     </span>
   );
