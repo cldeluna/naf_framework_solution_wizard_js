@@ -8,6 +8,58 @@
   --sans: system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:         #f5f7fa;
+    --panel-bg:   #ffffff;
+    --text:       #1a2028;
+    --text-dim:   #5a6472;
+    --border:     #d1d5db;
+    --naf-yellow: #c9a800;   /* darkened gold — readable as text/border on white */
+  }
+
+  /* Tooltip popup is hardcoded dark — flip to light */
+  .tooltip-box {
+    background: #ffffff;
+    border-color: #c9d2dc;
+    color: #1a2028;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+  .tooltip-btn { background: rgba(0,0,0,0.05); }
+
+  /* Light-blue links are invisible on white */
+  .report-html a,
+  .user-guide-body a,
+  .link-btn { color: #2563eb; }
+
+  /* Active chip tint inverted */
+  .chip.on { background: rgba(0,0,0,0.06); }
+
+  /* Native date picker UI */
+  input[type="date"] { color-scheme: light; }
+
+  /* Progress bar track */
+  .pbar { background: #dde3ea; }
+
+  /* Callout info: yellow rgba washes out on white */
+  .callout.info {
+    background: rgba(201,168,0,0.07);
+    border-color: rgba(201,168,0,0.45);
+  }
+
+  /* Active nav / seg tints re-pinned to dark-gold */
+  .nav-link.on { background: rgba(201,168,0,0.08); }
+  .seg.on      { background: rgba(201,168,0,0.10); }
+
+  /* Soften shadows on light bg */
+  .panel       { box-shadow: -8px 0 24px rgba(0,0,0,0.10); }
+  .modal       { box-shadow: 0 12px 40px rgba(0,0,0,0.10); }
+  .panel-overlay { background: rgba(0,0,0,0.35); }
+
+  /* Admin badge amber stays legible but slightly darker */
+  .admin-badge { color: #c07000; border-color: #c07000; }
+}
+
 * { box-sizing: border-box; }
 
 body {
