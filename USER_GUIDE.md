@@ -14,6 +14,7 @@ The app is designed around two distinct modes, and you can move between them at 
 | **Download your work** | ✅ JSON or the JSON+Markdown+Gantt ZIP bundle | ✅ Same |
 | **Upload/reload your work** | ✅ Load a previously downloaded `naf_report_*.json` back into the wizard | ✅ Same |
 | **Browse the Community Solutions catalog** (titles, ITIL category, and a short abstract preview for each published design) | ✅ Teaser cards visible — sign in to load a design or see full details | ✅ Full catalog with Load, fork, and delete controls |
+| **Load a community design into the wizard / fork it as your own** | ❌ Sign in required | ✅ One click to load any published design; saving creates your own copy |
 | **Save your design to the shared catalog, or edit/update one you already saved** | ❌ Not available | ✅ Required |
 
 Everything you need to work through the wizard on your own — filling it in, downloading it, coming back and loading it again — is available with no account at all. Signing in only comes into play when you want to look at what others have submitted or publish your own entry in that shared catalog.
@@ -111,6 +112,21 @@ The catalog is a **card grid** — one summary card per initiative, everything v
 
 If no database is configured for a given deployment, this page falls back to a message pointing you at file-based Download/Load instead.
 
+### Load and fork a community design (sign-in required)
+
+This is one of the most valuable features of the shared catalog, and it is only available to signed-in users.
+
+**What it does:** Clicking **📥 Load** on any solution row instantly fills the entire Wizard with that community member's design — all ten sections, exactly as they submitted it. The puzzle pieces fill in, the completion indicators update, and the live report preview renders, all in one click. You can then read through it, compare it to your own situation, and adapt it.
+
+**Forking — your copy, not theirs:** When you save a loaded design, the app always creates a new entry under your own account. It never modifies the original. This is true even if you edit heavily and save to the catalog — the submitter's record is untouched. The only exception is if you load one of your *own* previously saved designs, in which case you are offered a choice: **Update** (overwrite your entry) or **Save as new** (create a second version).
+
+**Why this matters:**
+- Jump-start your own design by adapting a real-world example from the community rather than starting from a blank puzzle.
+- Study how others have structured their Problem Statement, Use Case, and NAF component choices for similar automation projects.
+- Use a community design as a template — load it, clear the sections that don't apply, fill in your own context, and save it as your own.
+
+**Workflow:** Sign in on the Home page → go to Community Solutions → find a relevant design → click **📥 Load** → adapt it in the Wizard → download or save to the catalog.
+
 ## Admin page
 
 Restricted to accounts with the `admin` role. Lets an admin grant/change roles (`viewer`/`editor`/`admin`) by user UID. Catalog moderation — deleting any solution or initiative regardless of owner — happens on the Solutions page, where admins see delete controls on every record.
@@ -125,3 +141,4 @@ Reference glossary: use-case categories, deployment strategies, and the curated 
 - **Filled in pieces while signed out, then signed in to save — did it keep your work?** Yes, that's expected. Sign-in redirects to Google and back, but the draft was already autosaved locally before the redirect and is restored automatically.
 - **Can't save to the catalog?** The Save button stays grayed out until you're signed in — it won't prompt a sign-in for you, so go sign in via the Home page first. It also requires every *required* field to be filled in; hover the button to see how many are still missing.
 - **Importing an old JSON file that came from the original Streamlit app?** It should still load — legacy fields are tolerated on import.
+- **I loaded a community design and saved it — did I overwrite the original?** No. Saving someone else's loaded design always creates a new entry under your account. The original is never touched. Only loading and saving *your own* previously published design gives you the option to update it in place.
