@@ -70,11 +70,11 @@ export default function App() {
             <button className={experienceMode === "guided" ? "seg on" : "seg"}
                     onClick={() => setExperienceMode("guided")}>Guided</button>
           </span>
-          {experienceMode === "guided" && (
-            <p className="sidebar-ux-hint">
-              Numbered steps + Next → button guide you section by section.
-            </p>
-          )}
+          <p className="sidebar-ux-hint">
+            {experienceMode === "freeform"
+              ? "Start anywhere, in any order. Best when you already know the NAF framework or prefer to fill in sections as ideas come to you."
+              : "A concierge experience — numbered steps walk you through the business and solution design in the recommended order, with a Next → button at each step so you always know where to go."}
+          </p>
 
           <div className="sidebar-section-label">Field View</div>
           <span className="badge">
@@ -83,6 +83,11 @@ export default function App() {
             <button className={fieldView === "required" ? "seg on" : "seg"}
                     onClick={() => setFieldView("required")}>🔎 Compact</button>
           </span>
+          <p className="sidebar-ux-hint">
+            {fieldView === "all"
+              ? "Shows every field. Choose this for a thorough, complete design document that captures the full nuance of your solution — richer output, better conversations with stakeholders."
+              : "Shows only required fields — faster to complete and good for a first pass. Switch to Detailed any time to add context and produce a more complete design."}
+          </p>
         </div>
 
         <div className="sidebar-auth">
