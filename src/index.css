@@ -36,7 +36,9 @@ body {
   background: none; border: none; color: var(--text-dim);
   font-size: 0.85rem; padding: 0.5rem 1rem; cursor: pointer;
   text-align: left; border-left: 3px solid transparent; width: 100%;
+  display: flex; align-items: center; gap: 0.45rem;
 }
+.nav-icon { font-size: 1rem; flex-shrink: 0; }
 .nav-link:hover { color: var(--text); }
 .nav-link.on { color: var(--text); border-left-color: var(--naf-yellow); background: rgba(255,254,3,0.05); }
 
@@ -65,15 +67,30 @@ body {
   .app-shell { flex-direction: column; }
   .sidebar {
     width: 100%; min-width: 0; height: auto; position: static;
-    flex-direction: row; flex-wrap: wrap; align-items: center;
+    flex-direction: row; flex-wrap: nowrap; align-items: center;
     border-right: none; border-bottom: 3px solid var(--naf-yellow);
+    overflow-x: auto;
   }
-  .sidebar-brand { border-bottom: none; border-right: 1px solid var(--border); padding: 0.5rem 0.75rem; flex-shrink: 0; }
-  .sidebar-nav { flex-direction: row; flex: 1; flex-wrap: wrap; padding: 0; }
-  .nav-link { border-left: none; border-bottom: 3px solid transparent; padding: 0.45rem 0.6rem; width: auto; }
+  /* Hide the long brand title on mobile — page context is enough */
+  .sidebar-brand { display: none; }
+  /* Nav: single horizontal row of emoji icons only */
+  .sidebar-nav { flex-direction: row; flex: 1; flex-wrap: nowrap; padding: 0; }
+  .nav-text { display: none; }
+  .nav-icon { font-size: 1.25rem; }
+  .nav-link {
+    border-left: none; border-bottom: 3px solid transparent;
+    padding: 0.55rem 0.8rem; width: auto;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
   .nav-link.on { border-left-color: transparent; border-bottom-color: var(--naf-yellow); background: none; }
+  /* Hide UX settings — user sets preferences on desktop */
   .sidebar-ux { display: none; }
-  .sidebar-auth { margin-top: 0; border-top: none; border-left: 1px solid var(--border); padding: 0.5rem 0.75rem; }
+  /* Auth badge: compact, no wrapping */
+  .sidebar-auth {
+    margin-top: 0; border-top: none; border-left: 1px solid var(--border);
+    padding: 0.4rem 0.65rem; flex-shrink: 0;
+    font-size: 0.75rem;
+  }
 }
 
 .page { padding-top: 0.5rem; }

@@ -7,12 +7,12 @@ import SolutionsPage from "./pages/SolutionsPage";
 import AdminPage from "./pages/AdminPage";
 import TermsPage from "./pages/TermsPage";
 
-const NAV: { to: Route; label: string }[] = [
-  { to: "/", label: "🏠 Home" },
-  { to: "/wizard", label: "🧩 Design Solution Wizard" },
-  { to: "/solutions", label: "📚 Community Solutions" },
-  { to: "/admin", label: "🛠 Admin" },
-  { to: "/terms", label: "📖 Terms" },
+const NAV: { to: Route; icon: string; label: string }[] = [
+  { to: "/",          icon: "🏠", label: "Home" },
+  { to: "/wizard",    icon: "🧩", label: "Design Solution Wizard" },
+  { to: "/solutions", icon: "📚", label: "Community Solutions" },
+  { to: "/admin",     icon: "🛠",  label: "Admin" },
+  { to: "/terms",     icon: "📖", label: "Terms" },
 ];
 
 function AuthBadge() {
@@ -56,8 +56,10 @@ export default function App() {
           {NAV.map((n) => (
             <button key={n.to}
                     className={route === n.to ? "nav-link on" : "nav-link"}
+                    title={n.label}
                     onClick={() => navigate(n.to)}>
-              {n.label}
+              <span className="nav-icon">{n.icon}</span>
+              <span className="nav-text">{n.label}</span>
             </button>
           ))}
         </nav>
