@@ -31,7 +31,7 @@ body {
   color: var(--naf-yellow); line-height: 1.35;
   border-bottom: 1px solid var(--border);
 }
-.sidebar-nav { display: flex; flex-direction: column; padding: 0.35rem 0; }
+.sidebar-nav { display: flex; flex-direction: column; padding: 0.35rem 0; order: 1; }
 .nav-link {
   background: none; border: none; color: var(--text-dim);
   font-size: 0.85rem; padding: 0.5rem 1rem; cursor: pointer;
@@ -45,6 +45,7 @@ body {
 .sidebar-ux {
   padding: 0.6rem 1rem 0.75rem; border-top: 1px solid var(--border);
   display: flex; flex-direction: column; gap: 0.3rem;
+  order: 3;
 }
 .sidebar-section-label {
   font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
@@ -57,8 +58,9 @@ body {
 }
 .seg.seg-dim { opacity: 0.38; }
 .sidebar-auth {
-  margin-top: auto; padding: 0.7rem 1rem;
+  padding: 0.7rem 1rem;
   border-top: 1px solid var(--border);
+  order: 2;
 }
 .content { flex: 1; min-width: 0; padding: 1.25rem 1.5rem 4rem; max-width: 880px; }
 
@@ -110,6 +112,10 @@ body {
 .hero-figure figcaption { text-align: right; margin-top: 0.25rem; }
 .hero-pitch { max-width: 640px; margin: 0.75rem auto 1rem; text-align: center; }
 .hero-pitch h3 { border: none; }
+
+/* Two-column hero: graphic left, pitch right (stacks on narrow screens via .home-grid) */
+.home-grid .hero-figure { margin: 0; }
+.home-grid .hero-pitch { max-width: none; margin: 0; text-align: left; }
 .cta {
   background: var(--naf-yellow); color: #111; font-weight: 700;
   border: none; border-radius: 8px; padding: 0.7rem 1.2rem;
